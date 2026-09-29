@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>แยกตัวประกอบพหุนามดีกรีสอง &amp; อสมการ | ม.3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kanit:wght@500;700;800&family=Sarabun:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* =====================================================================
+   THEME : 3D CHUNKY STYLE - คอนทราสต์สูง อ่านง่าย เหมาะกับผู้เรียน ม.3
+   ===================================================================== */
+:root{
+  --ink:#152046; --muted:#5b6b8c; --line:#dbe3f5;
+  --blue:#2563eb;  --blue-d:#14399e;
+  --violet:#7c3aed;--violet-d:#4c1d95;
+  --green:#16a34a; --green-d:#14532d;
+  --amber:#f59e0b; --amber-d:#92400e;
+  --red:#ef4444;   --red-d:#991b1b;
+  --cyan:#0891b2;  --cyan-d:#0e5060;
+  --pink:#db2777;  --pink-d:#831843;
+  --r:20px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Sarabun',"Leelawadee UI","Tahoma",sans-serif;
+  color:var(--ink); font-size:17px; line-height:1.65;
+  background:
+    radial-gradient(1100px 620px at 12% -8%, #6d28d9 0%, transparent 60%),
+    radial-gradient(900px 620px at 100% 0%, #0891b2 0%, transparent 55%),
+    linear-gradient(160deg,#141c4f 0%,#221a63 45%,#0b2b46 100%);
+  background-attachment:fixed; min-height:100vh; padding-bottom:70px;
+}
+h1,h2,h3,h4,.ttl{font-family:'Kanit',"Leelawadee UI",sans-serif;font-weight:700;margin:0 0 .5rem}
+.mth{font-family:'Cambria Math','Times New Roman',Georgia,serif;font-size:1.22em;letter-spacing:.4px;font-weight:600}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+
+/* ---------- แถบบน ---------- */
+.topbar{
+  position:sticky;top:0;z-index:50;
+  background:linear-gradient(180deg,#1e2a6b,#16205a);
+  border-bottom:5px solid #0b1240;
+  box-shadow:0 10px 26px rgba(0,0,0,.42);
+}
+.topbar .wrap{display:flex;align-items:center;gap:12px;height:66px}
+.logo{
+  width:44px;height:44px;border-radius:14px;display:grid;place-items:center;
+  font-family:'Kanit';font-weight:800;font-size:20px;color:#fff;
+  background:linear-gradient(180deg,#fbbf24,#f59e0b);
+  box-shadow:0 5px 0 var(--amber-d),0 10px 16px rgba(0,0,0,.35);
+}
+.topbar h1{color:#fff;font-size:18px;margin:0;line-height:1.2}
+.topbar small{color:#a9b6e8;font-size:12.5px;display:block}
+.spacer{flex:1}
+.who{color:#dbe4ff;font-size:13.5px;text-align:right;line-height:1.35}
+
+/* ---------- การ์ด 3 มิติ ---------- */
+.card{
+  background:#fff;border-radius:var(--r);padding:22px;
+  border-bottom:7px solid #c8d2ec;
+  box-shadow:0 16px 34px rgba(5,10,40,.36);
+  margin-bottom:18px;
+}
+.card.tight{padding:16px}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(2,1fr)}
+.g3{grid-template-columns:repeat(3,1fr)}
+.g4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:820px){.g2,.g3,.g4{grid-template-columns:1fr}}
+
+/* ---------- ปุ่ม 3 มิติ ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  font-family:'Kanit';font-weight:700;font-size:16px;color:#fff;
+  padding:13px 22px;border:0;border-radius:16px;cursor:pointer;
+  background:linear-gradient(180deg,var(--c1),var(--c2));
+  box-shadow:0 6px 0 var(--cs),0 12px 20px rgba(0,0,0,.3);
+  transition:transform .11s ease,box-shadow .11s ease;
+  --c1:#3b82f6;--c2:#2563eb;--cs:#14399e;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 8px 0 var(--cs),0 16px 24px rgba(0,0,0,.34)}
+.btn:active{transform:translateY(5px);box-shadow:0 1px 0 var(--cs),0 5px 10px rgba(0,0,0,.3)}
+.btn[disabled]{opacity:.5;cursor:not-allowed;transform:none}
+.b-violet{--c1:#a78bfa;--c2:#7c3aed;--cs:#4c1d95}
+.b-green {--c1:#4ade80;--c2:#16a34a;--cs:#14532d}
+.b-amber {--c1:#fcd34d;--c2:#f59e0b;--cs:#92400e;color:#3b2200}
+.b-red   {--c1:#fb7185;--c2:#ef4444;--cs:#991b1b}
+.b-cyan  {--c1:#22d3ee;--c2:#0891b2;--cs:#0e5060}
+.b-pink  {--c1:#f472b6;--c2:#db2777;--cs:#831843}
+.b-grey  {--c1:#cbd5e1;--c2:#94a3b8;--cs:#475569;color:#0f172a}
+.btn.sm{padding:8px 14px;font-size:14px;border-radius:12px;box-shadow:0 4px 0 var(--cs),0 8px 12px rgba(0,0,0,.25)}
+.btn.lg{padding:18px 26px;font-size:19px;width:100%}
+
+/* ---------- เมนูหลักแบบ 3 มิติ ---------- */
+.menu{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+@media(max-width:860px){.menu{grid-template-columns:1fr}}
+.tile{
+  position:relative;border:0;cursor:pointer;text-align:left;color:#fff;
+  border-radius:24px;padding:22px 20px 20px;
+  background:linear-gradient(180deg,var(--t1),var(--t2));
+  box-shadow:0 10px 0 var(--ts),0 22px 34px rgba(0,0,0,.4);
+  transition:transform .14s ease,box-shadow .14s ease;
+  font-family:'Sarabun';
+}
+.tile:hover{transform:translateY(-4px);box-shadow:0 14px 0 var(--ts),0 26px 40px rgba(0,0,0,.45)}
+.tile:active{transform:translateY(6px);box-shadow:0 3px 0 var(--ts),0 10px 18px rgba(0,0,0,.4)}
+.tile .ic{
+  width:56px;height:56px;border-radius:18px;display:grid;place-items:center;
+  font-size:26px;font-family:'Kanit';font-weight:800;
+  background:rgba(255,255,255,.22);border:2px solid rgba(255,255,255,.35);
+  box-shadow:inset 0 -4px 0 rgba(0,0,0,.18);margin-bottom:12px;
+}
+.tile b{display:block;font-family:'Kanit';font-size:20px}
+.tile span{display:block;font-size:14px;opacity:.95;margin-top:4px}
+.t-blue{--t1:#60a5fa;--t2:#2563eb;--ts:#14399e}
+.t-violet{--t1:#c084fc;--t2:#7c3aed;--ts:#4c1d95}
+.t-green{--t1:#6ee7b7;--t2:#059669;--ts:#064e3b}
+.t-amber{--t1:#fcd34d;--t2:#f59e0b;--ts:#92400e;color:#3b2200}
+.t-cyan{--t1:#67e8f9;--t2:#0891b2;--ts:#0e5060}
+.t-pink{--t1:#f9a8d4;--t2:#db2777;--ts:#831843}
+
+/* ---------- ตัวเลือก ---------- */
+.choice{
+  display:flex;align-items:center;gap:14px;width:100%;text-align:left;
+  background:#fff;border:3px solid var(--line);border-radius:16px;
+  padding:14px 16px;margin-bottom:12px;cursor:pointer;font-size:18px;
+  font-family:'Sarabun';color:var(--ink);
+  box-shadow:0 5px 0 #cfd8ef;transition:transform .1s,box-shadow .1s,border-color .1s;
+}
+.choice:hover{transform:translateY(-2px);border-color:#93b4ff;box-shadow:0 7px 0 #b9c8ee}
+.choice:active{transform:translateY(3px);box-shadow:0 2px 0 #cfd8ef}
+.choice .lb{
+  flex:0 0 auto;width:40px;height:40px;border-radius:12px;display:grid;place-items:center;
+  font-family:'Kanit';font-weight:800;color:#fff;font-size:18px;
+  background:linear-gradient(180deg,#60a5fa,#2563eb);box-shadow:0 4px 0 #14399e;
+}
+.choice.ok{border-color:var(--green);background:#eafaf0;box-shadow:0 5px 0 #a7e8bf}
+.choice.ok .lb{background:linear-gradient(180deg,#4ade80,#16a34a);box-shadow:0 4px 0 var(--green-d)}
+.choice.no{border-color:var(--red);background:#fdeaea;box-shadow:0 5px 0 #f4b4b4}
+.choice.no .lb{background:linear-gradient(180deg,#fb7185,#ef4444);box-shadow:0 4px 0 var(--red-d)}
+.choice[disabled]{cursor:default}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.shake{animation:shake .32s}
+@keyframes pop{0%{transform:scale(1)}45%{transform:scale(1.035)}100%{transform:scale(1)}}
+.pop{animation:pop .3s}
+
+/* ---------- ชิ้นส่วนประกอบ ---------- */
+.tag{display:inline-block;background:#eef3ff;color:#1e40af;border:2px solid #c7d7ff;
+  border-radius:999px;padding:3px 12px;font-size:13px;font-weight:700;font-family:'Kanit'}
+.tag.g{background:#e8f8ee;color:#166534;border-color:#b7e6c8}
+.tag.a{background:#fff5e0;color:#92400e;border-color:#fcdc9a}
+.tag.r{background:#fdecec;color:#991b1b;border-color:#f6bcbc}
+.qbox{
+  background:linear-gradient(180deg,#f7f9ff,#eef3ff);border:3px solid #d6e2ff;
+  border-radius:18px;padding:18px;margin:12px 0 18px;box-shadow:inset 0 -5px 0 #dfe8ff;
+}
+.story{background:#fffaf0;border-left:8px solid var(--amber);border-radius:12px;
+  padding:12px 15px;margin-bottom:12px;font-size:16.5px}
+.bar{height:16px;background:#dfe6f7;border-radius:999px;overflow:hidden;box-shadow:inset 0 3px 6px rgba(0,0,0,.14)}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,#34d399,#0891b2);
+  box-shadow:inset 0 -4px 0 rgba(0,0,0,.14);transition:width .3s}
+.hearts{font-size:24px;letter-spacing:3px;color:#ef4444;text-shadow:0 3px 0 #7f1d1d}
+.hearts .d{color:#94a3b8;text-shadow:0 3px 0 #475569}
+.msg{border-radius:16px;padding:14px 16px;margin-top:12px;border:3px solid;font-size:16.5px}
+.msg.ok{background:#eafaf0;border-color:#79d69c;color:#14532d}
+.msg.no{background:#fdeaea;border-color:#f19a9a;color:#7f1d1d}
+.msg.hint{background:#fff7e3;border-color:#f6ce74;color:#7c4a03}
+table{width:100%;border-collapse:collapse;font-size:15px;background:#fff;border-radius:14px;overflow:hidden}
+th,td{border:1px solid var(--line);padding:9px 10px;text-align:center}
+th{background:#1e2a6b;color:#fff;font-family:'Kanit';font-weight:600}
+tbody tr:nth-child(even){background:#f6f8ff}
+td.l,th.l{text-align:left}
+input[type=text],input[type=number],input[type=password],select{
+  font-family:'Sarabun';font-size:16px;padding:11px 13px;border:3px solid var(--line);
+  border-radius:13px;width:100%;background:#fff;color:var(--ink);box-shadow:inset 0 3px 5px rgba(0,0,0,.05)}
+input:focus,select:focus{outline:none;border-color:#7aa2ff}
+label.fl{font-weight:700;font-size:14.5px;display:block;margin-bottom:5px;font-family:'Kanit'}
+.sw{display:flex;align-items:center;gap:10px;background:#f4f7ff;border:2px solid #d9e3fb;
+  border-radius:14px;padding:10px 14px;cursor:pointer;font-size:15px}
+.sw input{width:20px;height:20px;accent-color:#7c3aed}
+.view{display:none;animation:fade .25s}
+.view.active{display:block;padding-top:22px}
+@keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.kpi{background:#fff;border-radius:18px;padding:16px;text-align:center;border-bottom:6px solid #c8d2ec;
+  box-shadow:0 12px 24px rgba(0,0,0,.28)}
+.kpi b{display:block;font-family:'Kanit';font-size:31px;line-height:1.15;color:#1d4ed8}
+.kpi span{font-size:13.5px;color:var(--muted)}
+.stars{font-size:38px;color:#fbbf24;text-shadow:0 4px 0 #b45309;letter-spacing:6px}
+.mini{font-size:13.5px;color:var(--muted)}
+hr.s{border:0;border-top:3px dashed var(--line);margin:18px 0}
+
+/* ---------- ใบงานสำหรับพิมพ์ ---------- */
+#printWrap{display:none;background:#fff;color:#000}
+body.showprint #printWrap{display:block}
+#printOut{max-width:900px;margin:0 auto;padding:18px;background:#fff;color:#000;font-size:15px}
+#printOut h2{text-align:center;font-size:20px;margin:2px 0}
+#printOut .hd{text-align:center;border-bottom:2.5px solid #000;padding-bottom:8px;margin-bottom:12px}
+#printOut .nm{display:flex;gap:18px;flex-wrap:wrap;font-size:14.5px;margin-bottom:10px}
+#printOut ol{padding-left:22px}
+#printOut li{margin-bottom:9px;page-break-inside:avoid}
+#printOut .ch{display:grid;grid-template-columns:repeat(2,1fr);gap:2px 16px;margin-top:3px;font-size:14.5px}
+#printOut .key{background:#f1f1f1;border:1px solid #999;padding:8px;border-radius:6px;font-size:13.5px}
+#printOut .sheet td{font-size:13px;padding:5px}
+@page{size:A4;margin:12mm}
+@media print{
+  body{background:#fff !important;padding:0}
+  body>*:not(#printWrap){display:none !important}
+  #printWrap{display:block !important}
+  .noprint{display:none !important}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar noprint">
+  <div class="wrap">
+    <div class="logo">x²</div>
+    <div>
+      <h1>แยกตัวประกอบพหุนามดีกรีสอง &amp; การแก้อสมการ</h1>
+      <small>คณิตศาสตร์พื้นฐาน ชั้นมัธยมศึกษาปีที่ 3</small>
+    </div>
+    <div class="spacer"></div>
+    <div class="who" id="whoBox"></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- ============================ หน้าแรก ============================ -->
+<section id="view-home" class="view active">
+  <div class="card">
+    <h2>ลงทะเบียนผู้เรียน <span class="tag">ก่อนเริ่มทำแบบทดสอบ</span></h2>
+    <div class="grid g4">
+      <div><label class="fl">ชื่อ – นามสกุล</label><input type="text" id="inName" placeholder="เช่น เด็กหญิงปาลิตา ใจดี"></div>
+      <div><label class="fl">ชั้น / ห้อง</label><input type="text" id="inRoom" placeholder="ม.3/1"></div>
+      <div><label class="fl">เลขที่</label><input type="number" id="inNo" placeholder="12" min="1"></div>
+      <div style="display:flex;align-items:flex-end"><button class="btn b-green lg" onclick="saveUser()">บันทึกข้อมูล</button></div>
+    </div>
+    <div class="grid g2" style="margin-top:14px">
+      <label class="sw"><input type="checkbox" id="swType"> <b>โหมดพิมพ์คำตอบเอง</b> (สำหรับผู้เรียนกลุ่มเก่ง / Constructed Response)</label>
+      <label class="sw"><input type="checkbox" id="swAssist" checked> <b>โหมดช่วยเหลือ</b> (แสดงคำใบ้อัตโนมัติ – ห้องเรียนคละความสามารถ)</label>
+    </div>
+  </div>
+
+  <div class="menu">
+    <button class="tile t-blue" onclick="startQuiz('pre')">
+      <div class="ic">1</div><b>แบบทดสอบก่อนเรียน</b>
+      <span>ชุด A · 25 ข้อ · Pre-test<br>วัดความรู้พื้นฐานก่อนจัดการเรียนรู้</span>
+    </button>
+    <button class="tile t-violet" onclick="show('view-levels')">
+      <div class="ic">2</div><b>เกมฝึกทักษะ 4 ด่าน</b>
+      <span>หัวใจ 5 ดวง · ด่านที่ 1 จำนวน 10 ข้อ<br>ฝึกระหว่างเรียนแบบ Gamification</span>
+    </button>
+    <button class="tile t-green" onclick="startQuiz('post')">
+      <div class="ic">3</div><b>แบบทดสอบหลังเรียน</b>
+      <span>ชุด B · 25 ข้อ · Post-test<br>คู่ขนานกับชุด A ทุกประการ</span>
+    </button>
+    <button class="tile t-amber" onclick="openTeacher()">
+      <div class="ic">4</div><b>สรุปผลสำหรับครู</b>
+      <span>คะแนนรายบุคคล · x̄ · S.D. · E.I. · t-test<br>ส่งออกไฟล์ CSV ได้</span>
+    </button>
+    <button class="tile t-cyan" onclick="openPrint()">
+      <div class="ic">5</div><b>ใบงาน PDF สำหรับพิมพ์</b>
+      <span>ใบงาน · กระดาษคำตอบ · เฉลยพร้อมแนวคิด<br>ใช้ควบคู่กับเกมในชั้นเรียน</span>
+    </button>
+    <button class="tile t-pink" onclick="show('view-guide')">
+      <div class="ic">6</div><b>คู่มือ &amp; วิธีเพิ่มโจทย์</b>
+      <span>ตำแหน่งแก้ไขข้อมูลในไฟล์<br>level1Data – level4Data / คลังข้อสอบ</span>
+    </button>
+  </div>
+</section>
+
+<!-- ============================ เลือกด่าน ============================ -->
+<section id="view-levels" class="view">
+  <div class="card">
+    <h2>เกมฝึกทักษะ 4 ด่าน</h2>
+    <p class="mini">โครงสร้างด่านออกแบบตามลำดับขั้นการเรียนรู้ (Learning Progression) : จากการหาคู่จำนวน → แยกตัวประกอบ → แก้สมการ/อสมการ → ประยุกต์ใช้กับสถานการณ์ปัญหา · ผู้เรียนมีหัวใจ 5 ดวงต่อ 1 ด่าน</p>
+    <div class="menu" id="levelMenu" style="margin-top:14px"></div>
+    <div style="margin-top:16px"><button class="btn b-grey" onclick="show('view-home')">← กลับหน้าแรก</button></div>
+  </div>
+</section>
+
+<!-- ============================ แบบทดสอบ ============================ -->
+<section id="view-quiz" class="view">
+  <div class="card tight">
+    <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+      <span class="tag" id="qMode">แบบทดสอบ</span>
+      <b id="qCounter" style="font-family:'Kanit'">ข้อ 1 / 25</b>
+      <span class="spacer" style="flex:1"></span>
+      <span class="hearts" id="qHearts"></span>
+      <b id="qTimer" style="font-family:'Kanit';color:#1d4ed8">00:00</b>
+    </div>
+    <div class="bar" style="margin-top:10px"><i id="qBar" style="width:0%"></i></div>
+  </div>
+
+  <div class="card">
+    <div id="qSkill"></div>
+    <div id="qStory"></div>
+    <div class="qbox"><div id="qText" class="mth" style="font-size:1.3em"></div></div>
+    <div id="qChoices"></div>
+    <div id="qTypeBox" style="display:none">
+      <label class="fl">พิมพ์คำตอบของนักเรียน (เช่น (x + 3)(x − 4) หรือ 2 &lt; x &lt; 5)</label>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <input type="text" id="qTypeIn" placeholder="พิมพ์คำตอบที่นี่..." style="flex:1;min-width:220px" onkeydown="if(event.key==='Enter')submitTyped()">
+        <button class="btn b-green" onclick="submitTyped()">ส่งคำตอบ</button>
+      </div>
+      <div class="mini" style="margin-top:6px">พิมพ์เครื่องหมายลบด้วย <b>-</b> ยกกำลังสองด้วย <b>^2</b> และคั่นคำตอบหลายค่าด้วยเครื่องหมายจุลภาค เช่น <b>2, -5</b></div>
+    </div>
+    <div id="qFeed"></div>
+    <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap">
+      <button class="btn b-amber sm" id="btnHint" onclick="showHint()">คำใบ้</button>
+      <span style="flex:1"></span>
+      <button class="btn b-grey sm" onclick="quitQuiz()">ออก</button>
+      <button class="btn sm" id="btnNext" onclick="nextQ()" disabled>ข้อถัดไป →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================ ผลการทดสอบ ============================ -->
+<section id="view-result" class="view"><div id="resultBox"></div></section>
+
+<!-- ============================ ครู ============================ -->
+<section id="view-teacher" class="view"><div id="teacherBox"></div></section>
+
+<!-- ============================ คู่มือ ============================ -->
+<section id="view-guide" class="view">
+  <div class="card">
+    <h2>คู่มือการแก้ไข / เพิ่มโจทย์</h2>
+    <p>เปิดไฟล์ <b>index.html</b> ด้วยโปรแกรมแก้ไขข้อความ (Notepad++ / VS Code) แล้วเลื่อนไปยังส่วนที่คั่นด้วยคอมเมนต์ <b>/* === ... === */</b> ตามตารางต่อไปนี้</p>
+    <table>
+      <thead><tr><th style="width:170px">ตัวแปร</th><th class="l">รูปแบบข้อมูล</th><th class="l">ระบบจะสร้างโจทย์ให้อัตโนมัติ</th></tr></thead>
+      <tbody>
+        <tr><td><b>level1Data</b></td><td class="l"><code>{number: -45}</code> หรือ <code>{number: -45, sum: -4}</code></td><td class="l">หาคู่จำนวนเต็มที่คูณกันได้ตาม number (และบวกกันได้ตาม sum ถ้าระบุ)</td></tr>
+        <tr><td><b>level2Data</b></td><td class="l"><code>{number: -12, min: -15, max: 5}</code></td><td class="l">สุ่มคู่ p, q ที่ p·q = number และอยู่ในช่วง [min, max] แล้วสร้างโจทย์แยกตัวประกอบ x² + (p+q)x + number</td></tr>
+        <tr><td><b>level3Data</b></td><td class="l"><code>{a: -20, b: -7}</code> หรือเพิ่ม <code>op: "&lt;"</code></td><td class="l">สร้าง x² + (a+b)x + ab จากตัวประกอบ (x + a)(x + b) → ถ้าไม่ใส่ op เป็น "สมการ" ถ้าใส่ op (&lt;, &gt;, &lt;=, &gt;=) จะเป็น "อสมการ"</td></tr>
+        <tr><td><b>level4Data</b></td><td class="l"><code>{story, q, choices, answer, hint, why}</code></td><td class="l">โจทย์ปัญหาที่เขียนเอง · story ไม่ใส่ก็ได้ · answer เริ่มนับที่ 0</td></tr>
+        <tr><td><b>preTestBank</b><br><b>postTestBank</b></td><td class="l"><code>{id, skill, q, choices, answer, hint, why}</code></td><td class="l">คลังข้อสอบก่อน/หลังเรียน เพิ่มได้ไม่จำกัด แล้วปรับ <code>SETTINGS.itemsPerTest</code></td></tr>
+      </tbody>
+    </table>
+    <hr class="s">
+    <h3>หลักการที่ระบบบังคับใช้อัตโนมัติ</h3>
+    <ul>
+      <li><b>ความเป็นแบบทดสอบคู่ขนาน :</b> ข้อที่ i ของ preTestBank และ postTestBank ต้องวัดจุดประสงค์เดียวกัน ระบบจะหยิบข้อลำดับเดียวกันเสมอ</li>
+      <li><b>การถ่วงดุลตำแหน่งคำตอบ :</b> ระบบสุ่มตำแหน่งเฉลยแบบ Balanced Key Distribution ให้แต่ละตัวเลือก (ก ข ค ง) เป็นคำตอบถูกในสัดส่วนใกล้เคียง 25 % มากที่สุด (25 ข้อ ÷ 4 = 7/6/6/6 และสุ่มว่าตำแหน่งใดได้ 7 ทุกครั้งที่ทำ จึงมีค่าคาดหมายระยะยาวเท่ากับ 25 %)</li>
+      <li><b>ค่าตัวเลขในโจทย์ :</b> ควบคุมไม่ให้เกิน 300 ทุกข้อ เพื่อให้คำนวณในใจได้เหมาะกับระดับชั้น</li>
+      <li><b>สัญลักษณ์ :</b> ใช้เครื่องหมายลบทางคณิตศาสตร์ (−) ยกกำลัง (x²) และอสมการ (≤ ≥ &lt; &gt;) อย่างถูกต้องตามมาตรฐาน สสวท.</li>
+    </ul>
+    <button class="btn b-grey" onclick="show('view-home')">← กลับหน้าแรก</button>
+  </div>
+</section>
+
+</main>
+
+<!-- ============================ ส่วนพิมพ์ ============================ -->
+<div id="printWrap">
+  <div class="wrap noprint" style="padding:18px 16px">
+    <div class="card">
+      <h2>โหมดใบงาน PDF</h2>
+      <div class="grid g4">
+        <div><label class="fl">ชุดที่ต้องการพิมพ์</label>
+          <select id="pSet">
+            <option value="pre">แบบทดสอบก่อนเรียน (ชุด A)</option>
+            <option value="post">แบบทดสอบหลังเรียน (ชุด B)</option>
+            <option value="both">ทั้งสองชุด (A และ B)</option>
+            <option value="game">ใบงานฝึกทักษะจากเกม 4 ด่าน</option>
+          </select></div>
+        <div><label class="fl">จำนวนข้อ</label><input type="number" id="pCount" value="25" min="5" max="60"></div>
+        <div><label class="fl">โรงเรียน</label><input type="text" id="pSchool" value="โรงเรียน......................"></div>
+        <div><label class="fl">ครูผู้สอน</label><input type="text" id="pTeacher" value="ครู......................"></div>
+      </div>
+      <div class="grid g3" style="margin-top:12px">
+        <label class="sw"><input type="checkbox" id="pKey"> แนบเฉลยพร้อมแนวคิด (สำหรับครู)</label>
+        <label class="sw"><input type="checkbox" id="pSheet" checked> แนบกระดาษคำตอบ</label>
+        <label class="sw"><input type="checkbox" id="pShow" checked> แสดงตัวเลือก ก ข ค ง</label>
+      </div>
+      <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn b-cyan" onclick="buildPrint()">สร้างใบงาน</button>
+        <button class="btn b-green" onclick="window.print()">พิมพ์ / บันทึกเป็น PDF</button>
+        <button class="btn b-grey" onclick="closePrint()">← กลับหน้าแรก</button>
+      </div>
+      <p class="mini" style="margin-top:8px">เมื่อกล่องพิมพ์เปิดขึ้น ให้เลือกปลายทางเป็น <b>"บันทึกเป็น PDF / Save as PDF"</b> กระดาษ A4 แนวตั้ง</p>
+    </div>
+  </div>
+  <div id="printOut"></div>
+</div>
+
+<script>
+/* =====================================================================
+   1) การตั้งค่าทั่วไป  (แก้ไขได้ตามบริบทของโรงเรียน)
+   ===================================================================== */
+const SETTINGS = {
+  itemsPerTest : 25,      // จำนวนข้อของแบบทดสอบก่อน/หลังเรียน (เพิ่มข้อในคลังแล้วเพิ่มเลขนี้ได้)
+  hearts       : 5,       // จำนวนหัวใจในเกม (ปรับเป็น 5 สำหรับห้องเรียนคละความสามารถ)
+  passPercent  : 70,      // เกณฑ์ผ่าน (ร้อยละ)
+  teacherPIN   : "1234",  // รหัสเข้าหน้าสรุปของครู
+  feedbackPre  : false,   // ก่อนเรียน : ไม่เฉลยทันที (ป้องกันการเรียนรู้จากแบบทดสอบ)
+  feedbackPost : true     // หลังเรียน : เฉลยทันทีเพื่อเป็นข้อมูลย้อนกลับ (Feedback)
+};
+
+/* =====================================================================
+   2) คลังข้อสอบ "ก่อนเรียน" ชุด A   (เพิ่มข้อต่อท้ายได้ไม่จำกัด)
+      รูปแบบ : { id, skill, story(ไม่ใส่ก็ได้), q, choices, answer(เริ่มที่ 0), hint, why }
+   ===================================================================== */
+const preTestBank = [
+{id:"A01",skill:"ดึงตัวประกอบร่วม",q:"จงแยกตัวประกอบของ 6x² + 9x",choices:["3x(2x + 3)","3(2x² + 3x)","x(6x + 9)","3x(2x + 9)"],answer:0,hint:"หา ห.ร.ม. ของทุกพจน์ก่อน แล้วดึงออกนอกวงเล็บ",why:"ห.ร.ม. ของ 6x² และ 9x คือ 3x ⇒ 6x² + 9x = 3x(2x + 3)"},
+{id:"A02",skill:"ผลต่างกำลังสอง",q:"จงแยกตัวประกอบของ x² − 49",choices:["(x − 7)(x + 7)","(x − 7)²","(x + 7)²","(x − 49)(x + 1)"],answer:0,hint:"ใช้สูตร A² − B² = (A − B)(A + B)",why:"49 = 7² ⇒ x² − 7² = (x − 7)(x + 7)"},
+{id:"A03",skill:"ผลต่างกำลังสอง",q:"จงแยกตัวประกอบของ 9x² − 25",choices:["(3x − 5)(3x + 5)","(3x − 5)²","(9x − 5)(x + 5)","(3x + 5)²"],answer:0,hint:"เขียนแต่ละพจน์ให้อยู่ในรูปกำลังสองก่อน",why:"9x² = (3x)² และ 25 = 5² ⇒ (3x)² − 5² = (3x − 5)(3x + 5)"},
+{id:"A04",skill:"กำลังสองสมบูรณ์",q:"จงแยกตัวประกอบของ x² + 10x + 25",choices:["(x + 5)²","(x − 5)²","(x + 5)(x − 5)","(x + 10)(x + 5)"],answer:0,hint:"ตรวจว่า c เท่ากับ (b ÷ 2)² หรือไม่",why:"x² + 2(5)x + 5² = (x + 5)²"},
+{id:"A05",skill:"กำลังสองสมบูรณ์",q:"ต้องเติมจำนวนใดลงในช่องว่าง เพื่อให้ x² + 14x + ___ เป็นกำลังสองสมบูรณ์",choices:["49","28","14","7"],answer:0,hint:"ใช้สูตร (b ÷ 2)²",why:"(14 ÷ 2)² = 7² = 49 ⇒ x² + 14x + 49 = (x + 7)²"},
+{id:"A06",skill:"แยก x² + bx + c",q:"จงแยกตัวประกอบของ x² + 7x + 12",choices:["(x + 3)(x + 4)","(x + 2)(x + 6)","(x + 1)(x + 12)","(x − 3)(x − 4)"],answer:0,hint:"หาสองจำนวนที่คูณกันได้ 12 และบวกกันได้ 7",why:"3 × 4 = 12 และ 3 + 4 = 7 ⇒ (x + 3)(x + 4)"},
+{id:"A07",skill:"แยก x² + bx + c",q:"จงแยกตัวประกอบของ x² − 9x + 20",choices:["(x − 4)(x − 5)","(x + 4)(x + 5)","(x − 2)(x − 10)","(x − 1)(x − 20)"],answer:0,hint:"ผลคูณเป็นบวกแต่ผลบวกเป็นลบ ⇒ ทั้งสองจำนวนต้องเป็นลบ",why:"(−4)(−5) = 20 และ (−4) + (−5) = −9 ⇒ (x − 4)(x − 5)"},
+{id:"A08",skill:"แยก x² + bx + c",q:"จงแยกตัวประกอบของ x² + 2x − 15",choices:["(x + 5)(x − 3)","(x − 5)(x + 3)","(x + 15)(x − 1)","(x + 5)(x + 3)"],answer:0,hint:"ผลคูณเป็นลบ ⇒ เครื่องหมายของสองจำนวนต่างกัน",why:"5 × (−3) = −15 และ 5 + (−3) = 2 ⇒ (x + 5)(x − 3)"},
+{id:"A09",skill:"แยก x² + bx + c",q:"จงแยกตัวประกอบของ x² − 4x − 21",choices:["(x − 7)(x + 3)","(x + 7)(x − 3)","(x − 21)(x + 1)","(x − 7)(x − 3)"],answer:0,hint:"ต้องการสองจำนวนที่คูณกันได้ −21 และบวกกันได้ −4",why:"(−7) × 3 = −21 และ (−7) + 3 = −4 ⇒ (x − 7)(x + 3)"},
+{id:"A10",skill:"แยก ax² + bx + c",q:"จงแยกตัวประกอบของ 2x² + 7x + 3",choices:["(2x + 1)(x + 3)","(2x + 3)(x + 1)","(2x − 1)(x − 3)","(2x − 3)(x − 1)"],answer:0,hint:"วิธีแยกพจน์กลาง : หาสองจำนวนที่คูณได้ a·c = 2 × 3 = 6 และบวกได้ 7",why:"1 × 6 = 6, 1 + 6 = 7 ⇒ 2x² + x + 6x + 3 = x(2x + 1) + 3(2x + 1) = (2x + 1)(x + 3)"},
+{id:"A11",skill:"แยก ax² + bx + c",q:"จงแยกตัวประกอบของ 3x² − 5x − 2",choices:["(3x + 1)(x − 2)","(3x − 1)(x + 2)","(3x + 2)(x − 1)","(3x − 2)(x + 1)"],answer:0,hint:"a·c = 3 × (−2) = −6 หาสองจำนวนที่คูณได้ −6 และบวกได้ −5",why:"(−6) × 1 = −6, (−6) + 1 = −5 ⇒ 3x² − 6x + x − 2 = 3x(x − 2) + 1(x − 2) = (3x + 1)(x − 2)"},
+{id:"A12",skill:"ดึงตัวร่วม + ผลต่างกำลังสอง",q:"จงแยกตัวประกอบของ 2x² − 50",choices:["2(x − 5)(x + 5)","2(x − 5)²","2(x + 5)²","(2x − 5)(2x + 5)"],answer:0,hint:"ดึงตัวประกอบร่วมออกก่อน แล้วจึงใช้ผลต่างกำลังสอง",why:"2x² − 50 = 2(x² − 25) = 2(x − 5)(x + 5)"},
+{id:"A13",skill:"แก้สมการดีกรีสอง",q:"จงแก้สมการ (x − 2)(x + 5) = 0",choices:["x = 2 หรือ x = −5","x = −2 หรือ x = 5","x = 2 หรือ x = 5","x = −2 หรือ x = −5"],answer:0,hint:"สมบัติผลคูณเป็นศูนย์ : ถ้า A·B = 0 แล้ว A = 0 หรือ B = 0",why:"x − 2 = 0 ⇒ x = 2 ; x + 5 = 0 ⇒ x = −5"},
+{id:"A14",skill:"แก้สมการดีกรีสอง",q:"จงแก้สมการ x² − 5x + 6 = 0",choices:["x = 2 หรือ x = 3","x = −2 หรือ x = −3","x = 1 หรือ x = 6","x = −1 หรือ x = −6"],answer:0,hint:"แยกตัวประกอบด้านซ้ายก่อน",why:"x² − 5x + 6 = (x − 2)(x − 3) = 0 ⇒ x = 2 หรือ x = 3"},
+{id:"A15",skill:"แก้สมการดีกรีสอง",q:"จงแก้สมการ x² + x − 12 = 0",choices:["x = −4 หรือ x = 3","x = 4 หรือ x = −3","x = −4 หรือ x = −3","x = 2 หรือ x = −6"],answer:0,hint:"หาสองจำนวนที่คูณกันได้ −12 และบวกกันได้ 1",why:"x² + x − 12 = (x + 4)(x − 3) = 0 ⇒ x = −4 หรือ x = 3"},
+{id:"A16",skill:"แก้สมการ (จัดรูปก่อน)",q:"จงแก้สมการ x² = 6x",choices:["x = 0 หรือ x = 6","x = 6 เท่านั้น","x = 0 เท่านั้น","x = −6 หรือ x = 0"],answer:0,hint:"ย้ายทุกพจน์ไปข้างเดียวให้เท่ากับ 0 ห้ามหารทั้งสองข้างด้วย x",why:"x² − 6x = 0 ⇒ x(x − 6) = 0 ⇒ x = 0 หรือ x = 6 (การหารด้วย x ทำให้คำตอบ x = 0 หายไป)"},
+{id:"A17",skill:"แก้สมการ ax² + bx + c = 0",q:"จงแก้สมการ 2x² − 5x − 3 = 0",choices:["x = −1/2 หรือ x = 3","x = 1/2 หรือ x = −3","x = −1/2 หรือ x = −3","x = 1/2 หรือ x = 3"],answer:0,hint:"แยกตัวประกอบให้อยู่ในรูป (2x + ?)(x + ?)",why:"2x² − 5x − 3 = (2x + 1)(x − 3) = 0 ⇒ x = −1/2 หรือ x = 3"},
+{id:"A18",skill:"แก้อสมการดีกรีสอง",q:"จงแก้อสมการ (x − 2)(x − 5) < 0",choices:["2 < x < 5","x < 2 หรือ x > 5","−5 < x < −2","x < −5 หรือ x > −2"],answer:0,hint:"ผลคูณของสองจำนวนเป็นลบ ⇒ ค่า x อยู่ระหว่างรากทั้งสอง",why:"ราก คือ 2 และ 5 ; ทดสอบ x = 3 ได้ (1)(−2) = −2 < 0 เป็นจริง ⇒ คำตอบคือ 2 < x < 5"},
+{id:"A19",skill:"แก้อสมการดีกรีสอง",q:"จงแก้อสมการ (x + 3)(x − 1) > 0",choices:["x < −3 หรือ x > 1","−3 < x < 1","x < −1 หรือ x > 3","−1 < x < 3"],answer:0,hint:"ผลคูณเป็นบวก ⇒ ค่า x อยู่นอกช่วงของรากทั้งสอง",why:"ราก คือ −3 และ 1 ⇒ ช่วงคำตอบคือ x < −3 หรือ x > 1"},
+{id:"A20",skill:"แก้อสมการดีกรีสอง",q:"จงแก้อสมการ x² − 7x + 10 ≤ 0",choices:["2 ≤ x ≤ 5","x ≤ 2 หรือ x ≥ 5","−5 ≤ x ≤ −2","2 < x < 5"],answer:0,hint:"แยกตัวประกอบแล้วเขียนเส้นจำนวน เครื่องหมาย ≤ ต้องรวมจุดปลาย",why:"x² − 7x + 10 = (x − 2)(x − 5) ≤ 0 ⇒ 2 ≤ x ≤ 5 (รวมค่า x = 2 และ x = 5 ด้วย)"},
+{id:"A21",skill:"แก้อสมการดีกรีสอง",q:"จงแก้อสมการ x² − x − 6 ≥ 0",choices:["x ≤ −2 หรือ x ≥ 3","−2 ≤ x ≤ 3","x ≤ −3 หรือ x ≥ 2","−3 ≤ x ≤ 2"],answer:0,hint:"แยกตัวประกอบเป็น (x − 3)(x + 2) แล้วพิจารณาเครื่องหมาย",why:"(x − 3)(x + 2) ≥ 0 ⇒ ราก −2 และ 3 ⇒ x ≤ −2 หรือ x ≥ 3"},
+{id:"A22",skill:"แก้อสมการ ax² + bx + c",q:"จงแก้อสมการ 2x² + 5x − 3 ≤ 0",choices:["−3 ≤ x ≤ 1/2","x ≤ −3 หรือ x ≥ 1/2","−1/2 ≤ x ≤ 3","x ≤ −1/2 หรือ x ≥ 3"],answer:0,hint:"แยกตัวประกอบเป็น (2x − 1)(x + 3) แล้วหาราก",why:"(2x − 1)(x + 3) ≤ 0 ⇒ ราก คือ 1/2 และ −3 ⇒ ช่วงคำตอบคือ −3 ≤ x ≤ 1/2"},
+{id:"A23",skill:"โจทย์ปัญหา : พื้นที่",story:"สวนดอกไม้รูปสี่เหลี่ยมผืนผ้าแห่งหนึ่ง มีด้านยาวมากกว่าด้านกว้างอยู่ 3 เมตร และมีพื้นที่ 40 ตารางเมตร",q:"ด้านกว้างของสวนยาวกี่เมตร",choices:["5 เมตร","8 เมตร","4 เมตร","10 เมตร"],answer:0,hint:"ให้ด้านกว้างเป็น x เมตร ⇒ ด้านยาวเป็น (x + 3) เมตร ⇒ x(x + 3) = 40",why:"x² + 3x − 40 = 0 ⇒ (x + 8)(x − 5) = 0 ⇒ x = −8 หรือ x = 5 ; ความยาวต้องเป็นบวก ⇒ กว้าง 5 เมตร"},
+{id:"A24",skill:"โจทย์ปัญหา : จำนวน",story:"จำนวนเต็มบวกสองจำนวนเรียงติดกัน มีผลคูณเท่ากับ 72",q:"ผลบวกของสองจำนวนนี้เท่ากับเท่าใด",choices:["17","18","16","19"],answer:0,hint:"ให้จำนวนแรกเป็น n ⇒ อีกจำนวนหนึ่งคือ n + 1",why:"n(n + 1) = 72 ⇒ n² + n − 72 = 0 ⇒ (n + 9)(n − 8) = 0 ⇒ n = 8 ⇒ ผลบวกคือ 8 + 9 = 17"},
+{id:"A25",skill:"โจทย์ปัญหา : อสมการ",story:"กระดาษรูปสี่เหลี่ยมผืนผ้ากว้าง x เซนติเมตร และยาวมากกว่าความกว้าง 4 เซนติเมตร ต้องการให้มีพื้นที่ไม่เกิน 45 ตารางเซนติเมตร",q:"ความกว้างมากที่สุดที่เป็นไปได้คือกี่เซนติเมตร",choices:["5","9","6","4"],answer:0,hint:'ข้อความ "ไม่เกิน" แทนด้วยเครื่องหมาย ≤ ⇒ x(x + 4) ≤ 45',why:"x² + 4x − 45 ≤ 0 ⇒ (x + 9)(x − 5) ≤ 0 ⇒ −9 ≤ x ≤ 5 ; แต่ x > 0 ⇒ 0 < x ≤ 5 ⇒ กว้างมากที่สุด 5 เซนติเมตร"}
+];
+
+/* =====================================================================
+   3) คลังข้อสอบ "หลังเรียน" ชุด B  (คู่ขนานกับชุด A ข้อต่อข้อ)
+   ===================================================================== */
+const postTestBank = [
+{id:"B01",skill:"ดึงตัวประกอบร่วม",q:"จงแยกตัวประกอบของ 8x² + 12x",choices:["4x(2x + 3)","4(2x² + 3x)","x(8x + 12)","4x(2x + 12)"],answer:0,hint:"หา ห.ร.ม. ของทุกพจน์ก่อน แล้วดึงออกนอกวงเล็บ",why:"ห.ร.ม. ของ 8x² และ 12x คือ 4x ⇒ 8x² + 12x = 4x(2x + 3)"},
+{id:"B02",skill:"ผลต่างกำลังสอง",q:"จงแยกตัวประกอบของ x² − 64",choices:["(x − 8)(x + 8)","(x − 8)²","(x + 8)²","(x − 64)(x + 1)"],answer:0,hint:"ใช้สูตร A² − B² = (A − B)(A + B)",why:"64 = 8² ⇒ x² − 8² = (x − 8)(x + 8)"},
+{id:"B03",skill:"ผลต่างกำลังสอง",q:"จงแยกตัวประกอบของ 4x² − 81",choices:["(2x − 9)(2x + 9)","(2x − 9)²","(4x − 9)(x + 9)","(2x + 9)²"],answer:0,hint:"เขียนแต่ละพจน์ให้อยู่ในรูปกำลังสองก่อน",why:"4x² = (2x)² และ 81 = 9² ⇒ (2x)² − 9² = (2x − 9)(2x + 9)"},
+{id:"B04",skill:"กำลังสองสมบูรณ์",q:"จงแยกตัวประกอบของ x² − 12x + 36",choices:["(x − 6)²","(x + 6)²","(x − 6)(x + 6)","(x − 12)(x − 3)"],answer:0,hint:"ตรวจว่า c เท่ากับ (b ÷ 2)² หรือไม่",why:"x² − 2(6)x + 6² = (x − 6)²"},
+{id:"B05",skill:"กำลังสองสมบูรณ์",q:"ต้องเติมจำนวนใดลงในช่องว่าง เพื่อให้ x² − 16x + ___ เป็นกำลังสองสมบูรณ์",choices:["64","32","16","8"],answer:0,hint:"ใช้สูตร (b ÷ 2)²",why:"(−16 ÷ 2)² = (−8)² = 64 ⇒ x² − 16x + 64 = (x − 8)²"},
+{id:"B06",skill:"แยก x² + bx + c",q:"จงแยกตัวประกอบของ x² + 8x + 15",choices:["(x + 3)(x + 5)","(x + 2)(x + 6)","(x + 1)(x + 15)","(x − 3)(x − 5)"],answer:0,hint:"หาสองจำนวนที่คูณกันได้ 15 และบวกกันได้ 8",why:"3 × 5 = 15 และ 3 + 5 = 8 ⇒ (x + 3)(x + 5)"},
+{id:"B07",skill:"แยก x² + bx + c",q:"จงแยกตัวประกอบของ x² − 11x + 24",choices:["(x − 3)(x − 8)","(x + 3)(x + 8)","(x − 4)(x − 6)","(x − 2)(x − 12)"],answer:0,hint:"ผลคูณเป็นบวกแต่ผลบวกเป็นลบ ⇒ ทั้งสองจำนวนต้องเป็นลบ",why:"(−3)(−8) = 24 และ (−3) + (−8) = −11 ⇒ (x − 3)(x − 8)"},
+{id:"B08",skill:"แยก x² + bx + c",q:"จงแยกตัวประกอบของ x² + 3x − 18",choices:["(x + 6)(x − 3)","(x − 6)(x + 3)","(x + 18)(x − 1)","(x + 6)(x + 3)"],answer:0,hint:"ผลคูณเป็นลบ ⇒ เครื่องหมายของสองจำนวนต่างกัน",why:"6 × (−3) = −18 และ 6 + (−3) = 3 ⇒ (x + 6)(x − 3)"},
+{id:"B09",skill:"แยก x² + bx + c",q:"จงแยกตัวประกอบของ x² − 5x − 24",choices:["(x − 8)(x + 3)","(x + 8)(x − 3)","(x − 24)(x + 1)","(x − 8)(x − 3)"],answer:0,hint:"ต้องการสองจำนวนที่คูณกันได้ −24 และบวกกันได้ −5",why:"(−8) × 3 = −24 และ (−8) + 3 = −5 ⇒ (x − 8)(x + 3)"},
+{id:"B10",skill:"แยก ax² + bx + c",q:"จงแยกตัวประกอบของ 3x² + 8x + 4",choices:["(3x + 2)(x + 2)","(3x + 4)(x + 1)","(3x − 2)(x − 2)","(3x + 1)(x + 4)"],answer:0,hint:"วิธีแยกพจน์กลาง : หาสองจำนวนที่คูณได้ a·c = 3 × 4 = 12 และบวกได้ 8",why:"2 × 6 = 12, 2 + 6 = 8 ⇒ 3x² + 2x + 6x + 4 = x(3x + 2) + 2(3x + 2) = (3x + 2)(x + 2)"},
+{id:"B11",skill:"แยก ax² + bx + c",q:"จงแยกตัวประกอบของ 2x² − 7x − 4",choices:["(2x + 1)(x − 4)","(2x − 1)(x + 4)","(2x + 4)(x − 1)","(2x − 4)(x + 1)"],answer:0,hint:"a·c = 2 × (−4) = −8 หาสองจำนวนที่คูณได้ −8 และบวกได้ −7",why:"(−8) × 1 = −8, (−8) + 1 = −7 ⇒ 2x² − 8x + x − 4 = 2x(x − 4) + 1(x − 4) = (2x + 1)(x − 4)"},
+{id:"B12",skill:"ดึงตัวร่วม + ผลต่างกำลังสอง",q:"จงแยกตัวประกอบของ 3x² − 27",choices:["3(x − 3)(x + 3)","3(x − 3)²","3(x + 3)²","(3x − 3)(3x + 3)"],answer:0,hint:"ดึงตัวประกอบร่วมออกก่อน แล้วจึงใช้ผลต่างกำลังสอง",why:"3x² − 27 = 3(x² − 9) = 3(x − 3)(x + 3)"},
+{id:"B13",skill:"แก้สมการดีกรีสอง",q:"จงแก้สมการ (x + 3)(x − 4) = 0",choices:["x = −3 หรือ x = 4","x = 3 หรือ x = −4","x = 3 หรือ x = 4","x = −3 หรือ x = −4"],answer:0,hint:"สมบัติผลคูณเป็นศูนย์ : ถ้า A·B = 0 แล้ว A = 0 หรือ B = 0",why:"x + 3 = 0 ⇒ x = −3 ; x − 4 = 0 ⇒ x = 4"},
+{id:"B14",skill:"แก้สมการดีกรีสอง",q:"จงแก้สมการ x² − 7x + 12 = 0",choices:["x = 3 หรือ x = 4","x = −3 หรือ x = −4","x = 2 หรือ x = 6","x = −2 หรือ x = −6"],answer:0,hint:"แยกตัวประกอบด้านซ้ายก่อน",why:"x² − 7x + 12 = (x − 3)(x − 4) = 0 ⇒ x = 3 หรือ x = 4"},
+{id:"B15",skill:"แก้สมการดีกรีสอง",q:"จงแก้สมการ x² + 2x − 8 = 0",choices:["x = −4 หรือ x = 2","x = 4 หรือ x = −2","x = −4 หรือ x = −2","x = 1 หรือ x = −8"],answer:0,hint:"หาสองจำนวนที่คูณกันได้ −8 และบวกกันได้ 2",why:"x² + 2x − 8 = (x + 4)(x − 2) = 0 ⇒ x = −4 หรือ x = 2"},
+{id:"B16",skill:"แก้สมการ (จัดรูปก่อน)",q:"จงแก้สมการ x² = 8x",choices:["x = 0 หรือ x = 8","x = 8 เท่านั้น","x = 0 เท่านั้น","x = −8 หรือ x = 0"],answer:0,hint:"ย้ายทุกพจน์ไปข้างเดียวให้เท่ากับ 0 ห้ามหารทั้งสองข้างด้วย x",why:"x² − 8x = 0 ⇒ x(x − 8) = 0 ⇒ x = 0 หรือ x = 8 (การหารด้วย x ทำให้คำตอบ x = 0 หายไป)"},
+{id:"B17",skill:"แก้สมการ ax² + bx + c = 0",q:"จงแก้สมการ 3x² − 5x − 2 = 0",choices:["x = −1/3 หรือ x = 2","x = 1/3 หรือ x = −2","x = −1/3 หรือ x = −2","x = 1/3 หรือ x = 2"],answer:0,hint:"แยกตัวประกอบให้อยู่ในรูป (3x + ?)(x + ?)",why:"3x² − 5x − 2 = (3x + 1)(x − 2) = 0 ⇒ x = −1/3 หรือ x = 2"},
+{id:"B18",skill:"แก้อสมการดีกรีสอง",q:"จงแก้อสมการ (x − 1)(x − 6) < 0",choices:["1 < x < 6","x < 1 หรือ x > 6","−6 < x < −1","x < −6 หรือ x > −1"],answer:0,hint:"ผลคูณของสองจำนวนเป็นลบ ⇒ ค่า x อยู่ระหว่างรากทั้งสอง",why:"ราก คือ 1 และ 6 ; ทดสอบ x = 2 ได้ (1)(−4) = −4 < 0 เป็นจริง ⇒ คำตอบคือ 1 < x < 6"},
+{id:"B19",skill:"แก้อสมการดีกรีสอง",q:"จงแก้อสมการ (x + 2)(x − 4) > 0",choices:["x < −2 หรือ x > 4","−2 < x < 4","x < −4 หรือ x > 2","−4 < x < 2"],answer:0,hint:"ผลคูณเป็นบวก ⇒ ค่า x อยู่นอกช่วงของรากทั้งสอง",why:"ราก คือ −2 และ 4 ⇒ ช่วงคำตอบคือ x < −2 หรือ x > 4"},
+{id:"B20",skill:"แก้อสมการดีกรีสอง",q:"จงแก้อสมการ x² − 9x + 18 ≤ 0",choices:["3 ≤ x ≤ 6","x ≤ 3 หรือ x ≥ 6","−6 ≤ x ≤ −3","3 < x < 6"],answer:0,hint:"แยกตัวประกอบแล้วเขียนเส้นจำนวน เครื่องหมาย ≤ ต้องรวมจุดปลาย",why:"x² − 9x + 18 = (x − 3)(x − 6) ≤ 0 ⇒ 3 ≤ x ≤ 6 (รวมค่า x = 3 และ x = 6 ด้วย)"},
+{id:"B21",skill:"แก้อสมการดีกรีสอง",q:"จงแก้อสมการ x² − 2x − 8 ≥ 0",choices:["x ≤ −2 หรือ x ≥ 4","−2 ≤ x ≤ 4","x ≤ −4 หรือ x ≥ 2","−4 ≤ x ≤ 2"],answer:0,hint:"แยกตัวประกอบเป็น (x − 4)(x + 2) แล้วพิจารณาเครื่องหมาย",why:"(x − 4)(x + 2) ≥ 0 ⇒ ราก −2 และ 4 ⇒ x ≤ −2 หรือ x ≥ 4"},
+{id:"B22",skill:"แก้อสมการ ax² + bx + c",q:"จงแก้อสมการ 3x² + 5x − 2 ≤ 0",choices:["−2 ≤ x ≤ 1/3","x ≤ −2 หรือ x ≥ 1/3","−1/3 ≤ x ≤ 2","x ≤ −1/3 หรือ x ≥ 2"],answer:0,hint:"แยกตัวประกอบเป็น (3x − 1)(x + 2) แล้วหาราก",why:"(3x − 1)(x + 2) ≤ 0 ⇒ ราก คือ 1/3 และ −2 ⇒ ช่วงคำตอบคือ −2 ≤ x ≤ 1/3"},
+{id:"B23",skill:"โจทย์ปัญหา : พื้นที่",story:"แปลงผักรูปสี่เหลี่ยมผืนผ้าแห่งหนึ่ง มีด้านยาวมากกว่าด้านกว้างอยู่ 2 เมตร และมีพื้นที่ 48 ตารางเมตร",q:"ด้านกว้างของแปลงผักยาวกี่เมตร",choices:["6 เมตร","8 เมตร","4 เมตร","12 เมตร"],answer:0,hint:"ให้ด้านกว้างเป็น x เมตร ⇒ ด้านยาวเป็น (x + 2) เมตร ⇒ x(x + 2) = 48",why:"x² + 2x − 48 = 0 ⇒ (x + 8)(x − 6) = 0 ⇒ x = −8 หรือ x = 6 ; ความยาวต้องเป็นบวก ⇒ กว้าง 6 เมตร"},
+{id:"B24",skill:"โจทย์ปัญหา : จำนวน",story:"จำนวนเต็มบวกสองจำนวนเรียงติดกัน มีผลคูณเท่ากับ 90",q:"ผลบวกของสองจำนวนนี้เท่ากับเท่าใด",choices:["19","20","18","21"],answer:0,hint:"ให้จำนวนแรกเป็น n ⇒ อีกจำนวนหนึ่งคือ n + 1",why:"n(n + 1) = 90 ⇒ n² + n − 90 = 0 ⇒ (n + 10)(n − 9) = 0 ⇒ n = 9 ⇒ ผลบวกคือ 9 + 10 = 19"},
+{id:"B25",skill:"โจทย์ปัญหา : อสมการ",story:"กระดานไม้รูปสี่เหลี่ยมผืนผ้ากว้าง x เซนติเมตร และยาวมากกว่าความกว้าง 3 เซนติเมตร ต้องการให้มีพื้นที่ไม่เกิน 54 ตารางเซนติเมตร",q:"ความกว้างมากที่สุดที่เป็นไปได้คือกี่เซนติเมตร",choices:["6","9","7","5"],answer:0,hint:'ข้อความ "ไม่เกิน" แทนด้วยเครื่องหมาย ≤ ⇒ x(x + 3) ≤ 54',why:"x² + 3x − 54 ≤ 0 ⇒ (x + 9)(x − 6) ≤ 0 ⇒ −9 ≤ x ≤ 6 ; แต่ x > 0 ⇒ 0 < x ≤ 6 ⇒ กว้างมากที่สุด 6 เซนติเมตร"}
+];
+
+/* =====================================================================
+   4) ข้อมูลด่านเกม  ***แก้ไข / เพิ่มโจทย์ได้ง่ายที่บริเวณนี้***
+   ===================================================================== */
+
+/* -- ด่าน 1 : หาคู่จำนวน  {number: ผลคูณ, sum: ผลบวก (ไม่ใส่ก็ได้)} -- */
+const level1Data = [
+  {number:-45},           {number:36, sum:13},   {number:-24, sum:-2},
+  {number:48, sum:14},    {number:-60},          {number:72, sum:17},
+  {number:-18, sum:3},    {number:100, sum:25},  {number:-56, sum:-1},
+  {number:81, sum:18},    {number:-30, sum:-7},  {number:64, sum:20}
+];
+
+/* -- ด่าน 2 : แยกตัวประกอบ  {number: ค่าคงตัว c, min, max: ช่วงของตัวประกอบ} -- */
+const level2Data = [
+  {number:-12, min:-15, max:5},  {number:20,  min:-12, max:12},
+  {number:-20, min:-10, max:10}, {number:24,  min:-13, max:13},
+  {number:-28, min:-14, max:14}, {number:18,  min:-11, max:11},
+  {number:-36, min:-12, max:12}, {number:40,  min:-14, max:14},
+  {number:-16, min:-16, max:16}, {number:45,  min:-15, max:15}
+];
+
+/* -- ด่าน 3 : สมการ / อสมการ  {a, b} = ตัวประกอบ (x + a)(x + b) ; op = <, >, <=, >= -- */
+const level3Data = [
+  {a:-20, b:-7},            {a:5,  b:-3},             {a:-9, b:4},
+  {a:6,  b:2},              {a:4,  b:-9, op:"<"},     {a:-2, b:-8, op:">"},
+  {a:3,  b:-5, op:"<="},    {a:-6, b:1,  op:">="},    {a:-10,b:6,  op:"<"},
+  {a:7,  b:-2, op:">="}
+];
+
+/* -- ด่าน 4 : โจทย์ปัญหา  {story(ไม่ใส่ก็ได้), q, choices, answer(เริ่มที่ 0), hint, why} -- */
+const level4Data = [
+{story:"สวนหย่อมรูปสี่เหลี่ยมผืนผ้ามีด้านยาวมากกว่าด้านกว้าง 5 เมตร และมีพื้นที่ 84 ตารางเมตร",q:"ด้านกว้างของสวนหย่อมยาวกี่เมตร",choices:["7 เมตร","12 เมตร","6 เมตร","9 เมตร"],answer:0,hint:"ให้กว้าง = x ⇒ ยาว = x + 5 ⇒ x(x + 5) = 84",why:"x² + 5x − 84 = 0 ⇒ (x + 12)(x − 7) = 0 ⇒ x = 7 (ความยาวเป็นบวก)"},
+{story:"โยนลูกบอลขึ้นในแนวดิ่ง ความสูง h เมตร เมื่อเวลาผ่านไป t วินาที เป็นไปตามสมการ h = 20t − 5t²",q:"ลูกบอลตกถึงพื้น (h = 0) เมื่อเวลาผ่านไปกี่วินาที",choices:["4 วินาที","5 วินาที","2 วินาที","20 วินาที"],answer:0,hint:"แทน h = 0 แล้วดึงตัวประกอบร่วม 5t ออกมา",why:"20t − 5t² = 0 ⇒ 5t(4 − t) = 0 ⇒ t = 0 (ขณะโยน) หรือ t = 4 ⇒ ตกถึงพื้นเมื่อ t = 4 วินาที"},
+{story:"จำนวนเต็มบวกจำนวนหนึ่ง เมื่อนำมายกกำลังสองแล้วลบด้วยสามเท่าของจำนวนนั้น ได้ผลลัพธ์เท่ากับ 54",q:"จำนวนนั้นคือจำนวนใด",choices:["9","6","54","18"],answer:0,hint:"ให้จำนวนนั้นเป็น x ⇒ x² − 3x = 54",why:"x² − 3x − 54 = 0 ⇒ (x − 9)(x + 6) = 0 ⇒ x = 9 (เพราะเป็นจำนวนเต็มบวก)"},
+{story:"ห้องเรียนรูปสี่เหลี่ยมผืนผ้ากว้าง x เมตร ยาว (x + 2) เมตร ต้องการพื้นที่อย่างน้อย 35 ตารางเมตร",q:"ความกว้างน้อยที่สุดที่เป็นจำนวนเต็มคือกี่เมตร",choices:["5 เมตร","7 เมตร","6 เมตร","4 เมตร"],answer:0,hint:'ข้อความ "อย่างน้อย" แทนด้วย ≥ ⇒ x(x + 2) ≥ 35',why:"x² + 2x − 35 ≥ 0 ⇒ (x + 7)(x − 5) ≥ 0 ⇒ x ≤ −7 หรือ x ≥ 5 ; เนื่องจาก x > 0 ⇒ x ≥ 5"},
+{story:"ร้านค้าแห่งหนึ่งมีกำไร P บาท จากการขายเสื้อ x ตัว ตามสมการ P = −x² + 30x − 200",q:"ร้านค้าจะมีกำไร (P > 0) เมื่อขายเสื้อในช่วงใด",choices:["มากกว่า 10 ตัว แต่น้อยกว่า 20 ตัว","มากกว่า 20 ตัว","น้อยกว่า 10 ตัว","มากกว่า 200 ตัว"],answer:0,hint:"ตั้ง −x² + 30x − 200 > 0 แล้วคูณด้วย −1 อย่าลืมกลับเครื่องหมายอสมการ",why:"x² − 30x + 200 < 0 ⇒ (x − 10)(x − 20) < 0 ⇒ 10 < x < 20"},
+{story:"จำนวนคี่บวกสองจำนวนเรียงติดกัน มีผลคูณเท่ากับ 143",q:"ผลบวกของสองจำนวนนี้เท่ากับเท่าใด",choices:["24","22","26","28"],answer:0,hint:"ให้จำนวนแรกเป็น n ⇒ จำนวนคี่ถัดไปคือ n + 2",why:"n(n + 2) = 143 ⇒ n² + 2n − 143 = 0 ⇒ (n + 13)(n − 11) = 0 ⇒ n = 11 ⇒ 11 + 13 = 24"},
+{story:"กรอบรูปสี่เหลี่ยมจัตุรัสเดิมมีด้านยาว x เซนติเมตร ถ้าเพิ่มความยาวด้านอีก 3 เซนติเมตร จะได้พื้นที่ 121 ตารางเซนติเมตร",q:"เดิมกรอบรูปมีด้านยาวกี่เซนติเมตร",choices:["8 เซนติเมตร","11 เซนติเมตร","14 เซนติเมตร","9 เซนติเมตร"],answer:0,hint:"(x + 3)² = 121 ⇒ x² + 6x + 9 = 121",why:"x² + 6x − 112 = 0 ⇒ (x + 14)(x − 8) = 0 ⇒ x = 8 เซนติเมตร"},
+{story:"สนามเด็กเล่นรูปสี่เหลี่ยมผืนผ้ากว้าง x เมตร ยาว (x + 6) เมตร ต้องการให้มีพื้นที่ไม่เกิน 160 ตารางเมตร",q:"ข้อใดคือช่วงของความกว้างที่เป็นไปได้",choices:["0 < x ≤ 10","x ≥ 10","0 < x ≤ 16","−16 ≤ x ≤ 10"],answer:0,hint:"x(x + 6) ≤ 160 และความกว้างต้องเป็นจำนวนจริงบวก",why:"x² + 6x − 160 ≤ 0 ⇒ (x + 16)(x − 10) ≤ 0 ⇒ −16 ≤ x ≤ 10 ; เมื่อรวมเงื่อนไข x > 0 ⇒ 0 < x ≤ 10"}
+];
+
+/* -- โครงสร้างด่าน : ปรับ questionCount ได้ตามระดับผู้เรียน -- */
+const LEVELS = [
+ {id:1,name:"ด่าน 1 · ล่าคู่จำนวน",desc:"หาคู่จำนวนเต็มที่คูณกัน (และบวกกัน) ได้ตามกำหนด",cls:"t-blue",questionCount:10,data:level1Data,build:buildL1},
+ {id:2,name:"ด่าน 2 · แยกร่างพหุนาม",desc:"แยกตัวประกอบ x² + bx + c",cls:"t-violet",questionCount:8,data:level2Data,build:buildL2},
+ {id:3,name:"ด่าน 3 · ปลดล็อกคำตอบ",desc:"แก้สมการและอสมการดีกรีสอง",cls:"t-green",questionCount:8,data:level3Data,build:buildL3},
+ {id:4,name:"ด่าน 4 · ภารกิจโจทย์ปัญหา",desc:"ประยุกต์ใช้กับสถานการณ์ในชีวิตจริง",cls:"t-amber",questionCount:6,data:level4Data,build:buildL4}
+];
+
+/* =====================================================================
+   5) ยูทิลิตี้
+   ===================================================================== */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const LT=["ก","ข","ค","ง","จ"];
+function show(id){$$(".view").forEach(v=>v.classList.remove("active"));const e=$("#"+id);if(e)e.classList.add("active");window.scrollTo({top:0,behavior:"smooth"});}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];}return a;}
+function pick(a){return a[Math.floor(Math.random()*a.length)];}
+function num(n){return n<0?"−"+Math.abs(n):String(n);}
+function esc(s){return String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));}
+function lin(c){return c<0?"(x − "+Math.abs(c)+")":"(x + "+c+")";}
+function polyStr(p,q){const b=p+q,c=p*q;let s="x²";
+  if(b!==0)s+=(b<0?" − ":" + ")+(Math.abs(b)===1?"":Math.abs(b))+"x";
+  if(c!==0)s+=(c<0?" − ":" + ")+Math.abs(c);return s;}
+/* การสุ่มตำแหน่งเฉลยแบบถ่วงดุล : แต่ละตัวเลือกเป็นคำตอบถูกใกล้เคียง 25 % */
+function balancedPositions(n,k=4){const base=Math.floor(n/k),rem=n%k;const extra=shuffle([0,1,2,3]).slice(0,rem);
+  let pos=[];for(let i=0;i<k;i++){const c=base+(extra.includes(i)?1:0);for(let j=0;j<c;j++)pos.push(i);}return shuffle(pos);}
+function prepareItems(bank,count){
+  const items=bank.slice(0,Math.min(count,bank.length));
+  const pos=balancedPositions(items.length);
+  return items.map((it,i)=>{
+    const correct=it.choices[it.answer];
+    const others=shuffle(it.choices.filter((_,k)=>k!==it.answer));
+    const t=Math.min(pos[i],it.choices.length-1);
+    const arr=[...others];arr.splice(t,0,correct);
+    return Object.assign({},it,{choices:arr,answer:t,correctText:correct});
+  });
+}
+/* ตรวจคำตอบแบบพิมพ์เอง */
+function norm(s){return String(s).toLowerCase()
+  .replace(/\s+/g,"").replace(/[−–—]/g,"-").replace(/\^2/g,"²")
+  .replace(/≤/g,"<=").replace(/≥/g,">=").replace(/[·×*]/g,"")
+  .replace(/หรือ/g,"|").replace(/และ/g,"|").replace(/\bor\b/g,"|")
+  .replace(/เซนติเมตร|เมตร|ตารางเมตร|ซม\.|ม\.|วินาที|บาท|ตัว/g,"")
+  .replace(/x=/g,"");}
+function sameAns(user,correct,accept){
+  const a=norm(user);if(!a)return false;
+  const list=[correct].concat(accept||[]);
+  for(const c of list){
+    const b=norm(c);if(a===b)return true;
+    const m=b.match(/^(\d*)\(([^()]+)\)\(([^()]+)\)$/);
+    if(m&&a===(m[1]+"("+m[3]+")("+m[2]+")"))return true;
+    const sp=s=>s.split(/[|,]/).map(t=>t.trim()).filter(Boolean).sort().join("|");
+    if(sp(a)===sp(b))return true;
+  }
+  return false;
+}
+/* ฐานข้อมูลผลการเรียน (จัดเก็บในเครื่องด้วย localStorage) */
+const DB_KEY="quad_m3_db_v1";
+function loadDB(){try{return JSON.parse(localStorage.getItem(DB_KEY))||{records:[],games:[]}}catch(e){return{records:[],games:[]}}}
+function saveDB(d){try{localStorage.setItem(DB_KEY,JSON.stringify(d))}catch(e){}}
+let USER=JSON.parse(localStorage.getItem("quad_m3_user")||"null");
+function saveUser(){
+  const n=$("#inName").value.trim(),r=$("#inRoom").value.trim(),no=$("#inNo").value.trim();
+  if(!n){alert("กรุณากรอกชื่อ – นามสกุล");return;}
+  USER={name:n,room:r||"-",no:no||"-"};
+  localStorage.setItem("quad_m3_user",JSON.stringify(USER));paintUser();
+  alert("บันทึกข้อมูลผู้เรียนเรียบร้อยแล้ว");
+}
+function paintUser(){
+  if(USER){$("#whoBox").innerHTML="<b>"+esc(USER.name)+"</b><br>"+esc(USER.room)+" เลขที่ "+esc(USER.no);
+    $("#inName").value=USER.name;$("#inRoom").value=USER.room==="-"?"":USER.room;$("#inNo").value=USER.no==="-"?"":USER.no;}
+  else $("#whoBox").innerHTML="<span style='opacity:.8'>ยังไม่ได้ลงทะเบียน</span>";
+}
+const typeMode=()=>$("#swType").checked, assistMode=()=>$("#swAssist").checked;
+
+/* =====================================================================
+   6) ตัวสร้างโจทย์ของแต่ละด่าน
+   ===================================================================== */
+function factorPairs(n){const a=Math.abs(n),out=[];
+  for(let i=1;i<=a;i++){if(a%i===0){const j=a/i;
+    if(n<0){out.push([-i,j]);out.push([i,-j]);}else{out.push([i,j]);out.push([-i,-j]);}}}
+  return out;}
+function buildL1(sp){
+  const n=sp.number;let pairs=factorPairs(n);
+  let correct=null;
+  if(sp.sum!==undefined){const f=pairs.filter(p=>p[0]+p[1]===sp.sum);if(f.length)correct=pick(f);}
+  if(!correct)correct=pick(pairs);
+  const show=p=>"( "+num(p[0])+" , "+num(p[1])+" )";
+  const wrong=[],seen=new Set([show(correct)]);let guard=0;
+  while(wrong.length<3&&guard++<400){
+    const d=pick([-3,-2,-1,1,2,3,4,-4]);const cand=factorPairs(n+d);
+    if(!cand.length)continue;const p=pick(cand);
+    if(p[0]*p[1]===n)continue;
+    if(sp.sum!==undefined&&p[0]+p[1]===sp.sum&&p[0]*p[1]===n)continue;
+    const t=show(p);if(seen.has(t))continue;seen.add(t);wrong.push(t);
+  }
+  while(wrong.length<3){const t="( "+num(pick([2,3,5,-4,-6,7]))+" , "+num(pick([4,-3,6,-8,9]))+" )";if(!seen.has(t)){seen.add(t);wrong.push(t);}}
+  const q=sp.sum!==undefined
+    ? "คู่จำนวนเต็มในข้อใด <b>คูณกันได้ "+num(n)+"</b> และ <b>บวกกันได้ "+num(sp.sum)+"</b>"
+    : "คู่จำนวนเต็มในข้อใด <b>คูณกันได้ "+num(n)+"</b>";
+  return {skill:"หาคู่จำนวน",q:q,choices:[show(correct)].concat(wrong),answer:0,
+    hint:"แตกตัวประกอบของ "+Math.abs(n)+" ก่อน แล้วจึงใส่เครื่องหมายให้ผลคูณเป็น"+(n<0?"ลบ (ต่างเครื่องหมาย)":"บวก (เครื่องหมายเดียวกัน)"),
+    why:"("+num(correct[0])+") × ("+num(correct[1])+") = "+num(n)+(sp.sum!==undefined?" และ ("+num(correct[0])+") + ("+num(correct[1])+") = "+num(sp.sum):"")};
+}
+function buildL2(sp){
+  const c=sp.number;let ps=factorPairs(c).filter(p=>p[0]>=sp.min&&p[0]<=sp.max&&p[1]>=sp.min&&p[1]<=sp.max);
+  if(!ps.length)ps=factorPairs(c);
+  const [p,q]=pick(ps);
+  const correct=lin(p)+lin(q);
+  const cand=[lin(-p)+lin(-q),lin(p)+lin(-q),lin(-p)+lin(q),lin(q)+lin(-p)];
+  const wrong=[];const seen=new Set([correct]);
+  for(const t of shuffle(cand)){if(!seen.has(t)&&wrong.length<3){seen.add(t);wrong.push(t);}}
+  while(wrong.length<3){const t=lin(pick([1,2,3,-2,-3,4,-4]))+lin(pick([5,-5,6,-6,1,-1]));if(!seen.has(t)){seen.add(t);wrong.push(t);}}
+  return {skill:"แยกตัวประกอบ x² + bx + c",q:"จงแยกตัวประกอบของ "+polyStr(p,q),
+    choices:[correct].concat(wrong),answer:0,
+    hint:"หาสองจำนวนที่คูณกันได้ "+num(c)+" และบวกกันได้ "+num(p+q),
+    why:"("+num(p)+") × ("+num(q)+") = "+num(c)+" และ ("+num(p)+") + ("+num(q)+") = "+num(p+q)+" ⇒ "+correct};
+}
+function buildL3(sp){
+  const a=sp.a,b=sp.b,op=sp.op||null;
+  const r1=Math.min(-a,-b),r2=Math.max(-a,-b);
+  const poly=polyStr(a,b),fact=lin(a)+lin(b);
+  if(!op){
+    const correct="x = "+num(r1)+" หรือ x = "+num(r2);
+    const wrong=["x = "+num(-r1)+" หรือ x = "+num(-r2),"x = "+num(r1)+" หรือ x = "+num(-r2),"x = "+num(a)+" หรือ x = "+num(b)];
+    const seen=new Set([correct]);const w=[];
+    for(const t of wrong){if(!seen.has(t)){seen.add(t);w.push(t);}}
+    while(w.length<3){const t="x = "+num(pick([1,2,3,-1,-2,-3]))+" หรือ x = "+num(pick([4,5,-4,-5,6]));if(!seen.has(t)){seen.add(t);w.push(t);}}
+    return {skill:"แก้สมการดีกรีสอง",q:"จงแก้สมการ "+poly+" = 0",choices:[correct].concat(w.slice(0,3)),answer:0,
+      hint:"แยกตัวประกอบได้เป็น "+fact+" = 0 แล้วใช้สมบัติผลคูณเป็นศูนย์",
+      why:poly+" = "+fact+" = 0 ⇒ x = "+num(r1)+" หรือ x = "+num(r2)};
+  }
+  const strict=(op==="<"||op===">");
+  const sym={"<":"<",">":">","<=":"≤",">=":"≥"}[op];
+  const inside=strict?(num(r1)+" < x < "+num(r2)):(num(r1)+" ≤ x ≤ "+num(r2));
+  const outside=strict?("x < "+num(r1)+" หรือ x > "+num(r2)):("x ≤ "+num(r1)+" หรือ x ≥ "+num(r2));
+  const isIn=(op==="<"||op==="<=");
+  const correct=isIn?inside:outside;
+  const w=[isIn?outside:inside,
+           strict?(num(-r2)+" < x < "+num(-r1)):(num(-r2)+" ≤ x ≤ "+num(-r1)),
+           strict?("x < "+num(-r2)+" หรือ x > "+num(-r1)):("x ≤ "+num(-r2)+" หรือ x ≥ "+num(-r1))];
+  const seen=new Set([correct]);const ws=[];
+  for(const t of w){if(!seen.has(t)){seen.add(t);ws.push(t);}}
+  while(ws.length<3){const t="x "+sym+" "+num(pick([1,2,3,-1,-2,-3]));if(!seen.has(t)){seen.add(t);ws.push(t);}}
+  return {skill:"แก้อสมการดีกรีสอง",q:"จงแก้อสมการ "+poly+" "+sym+" 0",choices:[correct].concat(ws.slice(0,3)),answer:0,
+    hint:"แยกตัวประกอบเป็น "+fact+" "+sym+" 0 ได้ราก "+num(r1)+" และ "+num(r2)+" แล้วเขียนเส้นจำนวนพิจารณาเครื่องหมาย"+(strict?" (ไม่รวมจุดปลาย)":" (รวมจุดปลาย)"),
+    why:fact+" "+sym+" 0 ⇒ "+(isIn?"ผลคูณเป็นลบ/ศูนย์ ⇒ x อยู่ระหว่างราก":"ผลคูณเป็นบวก/ศูนย์ ⇒ x อยู่นอกช่วงของราก")+" ⇒ "+correct};
+}
+function buildL4(sp){return Object.assign({skill:"โจทย์ปัญหา"},sp);}
+
+/* =====================================================================
+   7) ระบบทำแบบทดสอบ / เกม
+   ===================================================================== */
+let S=null,timer=null;
+function startQuiz(mode){
+  if(!USER){alert("กรุณาลงทะเบียนชื่อผู้เรียนก่อนเริ่มทำแบบทดสอบ");$("#inName").focus();return;}
+  const bank=mode==="pre"?preTestBank:postTestBank;
+  const items=prepareItems(bank,SETTINGS.itemsPerTest);
+  S={kind:"quiz",mode:mode,items:items,i:0,score:0,log:[],hearts:null,t0:Date.now(),hintUsed:0,levelName:""};
+  $("#qMode").textContent=mode==="pre"?"แบบทดสอบก่อนเรียน (ชุด A)":"แบบทดสอบหลังเรียน (ชุด B)";
+  $("#qMode").className="tag"+(mode==="post"?" g":"");
+  $("#qHearts").textContent="";
+  startTimer();show("view-quiz");paintQ();
+}
+function startLevel(id){
+  if(!USER){alert("กรุณาลงทะเบียนชื่อผู้เรียนก่อนเริ่มเล่นเกม");show("view-home");$("#inName").focus();return;}
+  const L=LEVELS.find(l=>l.id===id);
+  const src=shuffle(L.data).slice(0,Math.min(L.questionCount,L.data.length));
+  let built=src.map(sp=>L.build(sp));
+  while(built.length<L.questionCount)built.push(L.build(pick(L.data)));
+  const items=prepareItems(built,L.questionCount);
+  S={kind:"game",mode:"game",levelId:id,levelName:L.name,items:items,i:0,score:0,log:[],hearts:SETTINGS.hearts,t0:Date.now(),hintUsed:0};
+  $("#qMode").textContent=L.name;$("#qMode").className="tag a";
+  startTimer();show("view-quiz");paintQ();
+}
+function startTimer(){clearInterval(timer);timer=setInterval(()=>{
+  const s=Math.floor((Date.now()-S.t0)/1000);
+  $("#qTimer").textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");},500);}
+function paintHearts(){
+  if(S.hearts===null){$("#qHearts").textContent="";return;}
+  let h="";for(let i=0;i<SETTINGS.hearts;i++)h+=i<S.hearts?"♥":"<span class='d'>♥</span>";
+  $("#qHearts").innerHTML=h;}
+function paintQ(){
+  const it=S.items[S.i];
+  $("#qCounter").textContent="ข้อ "+(S.i+1)+" / "+S.items.length;
+  $("#qBar").style.width=(S.i/S.items.length*100)+"%";
+  paintHearts();
+  $("#qSkill").innerHTML=it.skill?"<span class='tag'>"+esc(it.skill)+"</span>":"";
+  $("#qStory").innerHTML=it.story?"<div class='story'>"+esc(it.story)+"</div>":"";
+  $("#qText").innerHTML=it.q;
+  $("#qFeed").innerHTML="";$("#btnNext").disabled=true;$("#btnHint").disabled=false;
+  const useType=typeMode();
+  $("#qTypeBox").style.display=useType?"block":"none";
+  $("#qChoices").style.display=useType?"none":"block";
+  if(useType){$("#qTypeIn").value="";setTimeout(()=>$("#qTypeIn").focus(),60);}
+  $("#qChoices").innerHTML=it.choices.map((c,k)=>
+    "<button class='choice' data-k='"+k+"' onclick='answer("+k+")'><span class='lb'>"+LT[k]+"</span><span class='mth'>"+c+"</span></button>").join("");
+  if(assistMode()&&it.hint)showHint(true);
+}
+function showHint(auto){
+  const it=S.items[S.i];if(!it.hint)return;
+  if(!auto)S.hintUsed++;
+  if(!$("#qFeed").querySelector(".hint"))
+    $("#qFeed").insertAdjacentHTML("afterbegin","<div class='msg hint'><b>คำใบ้ :</b> <span class='mth'>"+it.hint+"</span></div>");
+}
+function answer(k){
+  const it=S.items[S.i];const ok=(k===it.answer);
+  finish(ok,it.choices[k],k);
+}
+function submitTyped(){
+  const it=S.items[S.i];const v=$("#qTypeIn").value.trim();
+  if(!v){alert("กรุณาพิมพ์คำตอบก่อนส่ง");return;}
+  const ok=sameAns(v,it.correctText,it.accept);
+  finish(ok,v,-1);
+}
+function finish(ok,userText,k){
+  const it=S.items[S.i];
+  $$("#qChoices .choice").forEach(b=>{b.disabled=true;
+    const kk=+b.dataset.k;
+    if(kk===it.answer)b.classList.add("ok");
+    if(kk===k&&!ok){b.classList.add("no","shake");}
+    if(kk===it.answer&&ok)b.classList.add("pop");});
+  if(ok)S.score++;
+  if(!ok&&S.hearts!==null){S.hearts--;paintHearts();}
+  S.log.push({id:it.id||("G"+(S.i+1)),skill:it.skill||"",q:it.q,user:userText,correct:it.correctText,ok:ok,why:it.why||""});
+  const showFB=S.kind==="game"||(S.mode==="pre"?SETTINGS.feedbackPre:SETTINGS.feedbackPost);
+  if(showFB){
+    $("#qFeed").insertAdjacentHTML("beforeend",
+      "<div class='msg "+(ok?"ok":"no")+"'><b>"+(ok?"ถูกต้อง":"ยังไม่ถูก")+"</b> · เฉลย : <span class='mth'>"+it.correctText+"</span>"+
+      (it.why?"<br><b>แนวคิด :</b> <span class='mth'>"+it.why+"</span>":"")+"</div>");
+  }else{
+    $("#qFeed").insertAdjacentHTML("beforeend","<div class='msg hint'>บันทึกคำตอบเรียบร้อย · ระบบจะเฉลยทั้งหมดเมื่อทำครบทุกข้อ</div>");
+  }
+  $("#btnNext").disabled=false;$("#btnHint").disabled=true;
+  if(S.hearts===0){setTimeout(()=>endSession(true),900);}
+}
+function nextQ(){
+  S.i++;
+  if(S.i>=S.items.length){endSession(false);return;}
+  paintQ();
+}
+function quitQuiz(){if(confirm("ต้องการออกจากแบบทดสอบ/เกมหรือไม่ (ผลจะไม่ถูกบันทึก)")){clearInterval(timer);show("view-home");}}
+function endSession(dead){
+  clearInterval(timer);
+  const sec=Math.floor((Date.now()-S.t0)/1000);
+  const total=S.items.length,sc=S.score,pc=Math.round(sc/total*1000)/10;
+  const db=loadDB();
+  const rec={name:USER.name,room:USER.room,no:USER.no,mode:S.mode,level:S.levelName,
+    score:sc,total:total,percent:pc,sec:sec,hint:S.hintUsed,typed:typeMode(),
+    date:new Date().toLocaleString("th-TH"),log:S.log};
+  if(S.kind==="quiz")db.records.push(rec);else db.games.push(rec);
+  saveDB(db);
+  const stars=pc>=90?3:pc>=70?2:pc>=50?1:0;
+  const lvTxt=pc>=80?"ดีมาก":pc>=70?"ดี":pc>=50?"พอใช้":"ควรปรับปรุง";
+  let html="<div class='card'>";
+  html+="<h2 style='text-align:center'>"+(dead?"หัวใจหมดแล้ว! ลองใหม่อีกครั้งนะ":"สรุปผลการทำ"+(S.kind==="game"?"กิจกรรม "+esc(S.levelName):(S.mode==="pre"?"แบบทดสอบก่อนเรียน":"แบบทดสอบหลังเรียน")))+"</h2>";
+  html+="<div style='text-align:center' class='stars'>"+"★".repeat(stars)+"☆".repeat(3-stars)+"</div>";
+  html+="<div class='grid g4' style='margin-top:14px'>";
+  html+="<div class='kpi'><b>"+sc+" / "+total+"</b><span>คะแนนที่ได้</span></div>";
+  html+="<div class='kpi'><b>"+pc+" %</b><span>ร้อยละของคะแนนเต็ม</span></div>";
+  html+="<div class='kpi'><b>"+lvTxt+"</b><span>ระดับคุณภาพ (เกณฑ์ผ่าน "+SETTINGS.passPercent+" %)</span></div>";
+  html+="<div class='kpi'><b>"+Math.floor(sec/60)+":"+String(sec%60).padStart(2,"0")+"</b><span>เวลาที่ใช้ (นาที:วินาที)</span></div>";
+  html+="</div>";
+  html+="<hr class='s'><h3>การวิเคราะห์รายข้อ (Item-level Feedback)</h3>";
+  html+="<div style='overflow:auto'><table><thead><tr><th style='width:52px'>ข้อ</th><th class='l'>จุดประสงค์ / โจทย์</th><th class='l'>คำตอบของนักเรียน</th><th class='l'>เฉลยและแนวคิด</th><th style='width:66px'>ผล</th></tr></thead><tbody>";
+  S.log.forEach((l,i)=>{html+="<tr><td>"+(i+1)+"</td><td class='l'><b>"+esc(l.skill)+"</b><br><span class='mth'>"+l.q+"</span></td><td class='l mth'>"+esc(l.user)+"</td><td class='l'><span class='mth'>"+l.correct+"</span><br><span class='mini'>"+l.why+"</span></td><td>"+(l.ok?"<span class='tag g'>ถูก</span>":"<span class='tag r'>ผิด</span>")+"</td></tr>";});
+  html+="</tbody></table></div>";
+  html+="<div style='display:flex;gap:10px;margin-top:16px;flex-wrap:wrap'>";
+  html+="<button class='btn' onclick=\"show('view-home')\">← กลับหน้าแรก</button>";
+  if(S.kind==="game")html+="<button class='btn b-violet' onclick=\"startLevel("+S.levelId+")\">เล่นด่านนี้อีกครั้ง</button><button class='btn b-cyan' onclick=\"show('view-levels')\">เลือกด่านอื่น</button>";
+  else html+="<button class='btn b-amber' onclick=\"openTeacher()\">ดูหน้าสรุปของครู</button>";
+  html+="<button class='btn b-grey' onclick='window.print()'>พิมพ์ผลรายบุคคล</button></div></div>";
+  $("#resultBox").innerHTML=html;show("view-result");
+}
+
+/* =====================================================================
+   8) หน้าสรุปผลสำหรับครู
+   ===================================================================== */
+function openTeacher(){
+  const p=prompt("กรุณาใส่รหัสผ่านสำหรับครู");
+  if(p===null)return;
+  if(p!==SETTINGS.teacherPIN){alert("รหัสผ่านไม่ถูกต้อง");return;}
+  paintTeacher();show("view-teacher");
+}
+function keyOf(r){return r.name+"|"+r.room+"|"+r.no;}
+function mean(a){return a.length?a.reduce((x,y)=>x+y,0)/a.length:0;}
+function sd(a){if(a.length<2)return 0;const m=mean(a);return Math.sqrt(a.reduce((s,x)=>s+(x-m)*(x-m),0)/(a.length-1));}
+function f2(n){return (Math.round(n*100)/100).toFixed(2);}
+function paintTeacher(){
+  const db=loadDB();const map=new Map();
+  db.records.forEach(r=>{const k=keyOf(r);if(!map.has(k))map.set(k,{name:r.name,room:r.room,no:r.no});
+    const o=map.get(k);if(r.mode==="pre")o.pre=r;else o.post=r;});
+  db.games.forEach(g=>{const k=keyOf(g);if(!map.has(k))map.set(k,{name:g.name,room:g.room,no:g.no});
+    const o=map.get(k);o.game=(o.game||0)+1;o.gameBest=Math.max(o.gameBest||0,g.percent);});
+  const rows=[...map.values()].sort((a,b)=>(a.room+"").localeCompare(b.room+"")||(+a.no)-(+b.no));
+  const F=SETTINGS.itemsPerTest;
+  let h="<div class='card'><h2>หน้าสรุปผลสำหรับครูผู้สอน</h2>";
+  h+="<p class='mini'>ข้อมูลจัดเก็บไว้ในเครื่องของผู้ใช้ (Local Storage) · E.I. = ดัชนีประสิทธิผล = (คะแนนหลังเรียน − คะแนนก่อนเรียน) ÷ (คะแนนเต็ม − คะแนนก่อนเรียน) ; ค่าตั้งแต่ 0.50 ขึ้นไป ถือว่าสื่อมีประสิทธิผลตามเกณฑ์</p>";
+  const pres=rows.filter(r=>r.pre).map(r=>r.pre.score),posts=rows.filter(r=>r.post).map(r=>r.post.score);
+  const pairs=rows.filter(r=>r.pre&&r.post);
+  const d=pairs.map(r=>r.post.score-r.pre.score);
+  let t="-";
+  if(d.length>1){const sdd=sd(d);t=sdd>0?f2(mean(d)/(sdd/Math.sqrt(d.length))):"-";}
+  const eiAll=pairs.length&&(F-mean(pres))!==0?f2((mean(posts)-mean(pres))/(F-mean(pres))):"-";
+  h+="<div class='grid g4' style='margin-top:10px'>";
+  h+="<div class='kpi'><b>"+rows.length+"</b><span>จำนวนผู้เรียน (คน)</span></div>";
+  h+="<div class='kpi'><b>"+f2(mean(pres))+"</b><span>x̄ ก่อนเรียน (S.D. = "+f2(sd(pres))+")</span></div>";
+  h+="<div class='kpi'><b>"+f2(mean(posts))+"</b><span>x̄ หลังเรียน (S.D. = "+f2(sd(posts))+")</span></div>";
+  h+="<div class='kpi'><b>"+eiAll+"</b><span>ดัชนีประสิทธิผลรวม (E.I.) · t = "+t+", df = "+(Math.max(d.length-1,0))+"</span></div></div>";
+  h+="<hr class='s'><h3>ตารางคะแนนรายบุคคล</h3><div style='overflow:auto'><table><thead><tr>"+
+     "<th>ที่</th><th class='l'>ชื่อ – นามสกุล</th><th>ชั้น/ห้อง</th><th>เลขที่</th>"+
+     "<th>ก่อนเรียน<br>("+F+")</th><th>หลังเรียน<br>("+F+")</th><th>ผลต่าง</th><th>ร้อยละ<br>ความก้าวหน้า</th><th>E.I.<br>รายบุคคล</th><th>ผลเกม<br>(สูงสุด %)</th><th>สถานะ</th><th>รายละเอียด</th></tr></thead><tbody>";
+  rows.forEach((r,i)=>{
+    const pre=r.pre?r.pre.score:null,post=r.post?r.post.score:null;
+    const diff=(pre!==null&&post!==null)?post-pre:null;
+    const gain=(diff!==null&&F-pre!==0)?f2(diff/(F-pre)*100):"-";
+    const ei=(diff!==null&&F-pre!==0)?f2(diff/(F-pre)):"-";
+    const pass=post!==null&&(post/F*100)>=SETTINGS.passPercent;
+    h+="<tr><td>"+(i+1)+"</td><td class='l'>"+esc(r.name)+"</td><td>"+esc(r.room)+"</td><td>"+esc(r.no)+"</td>"+
+       "<td>"+(pre!==null?pre:"-")+"</td><td>"+(post!==null?post:"-")+"</td>"+
+       "<td>"+(diff!==null?(diff>0?"+"+diff:diff):"-")+"</td><td>"+gain+(gain==="-"?"":" %")+"</td><td>"+ei+"</td>"+
+       "<td>"+(r.gameBest!==undefined?f2(r.gameBest):"-")+"</td>"+
+       "<td>"+(post===null?"<span class='tag a'>ยังไม่ทดสอบ</span>":(pass?"<span class='tag g'>ผ่านเกณฑ์</span>":"<span class='tag r'>ไม่ผ่าน</span>"))+"</td>"+
+       "<td><button class='btn sm b-cyan' onclick=\"detail('"+esc(keyOf(r).replace(/'/g,""))+"')\">ดู</button></td></tr>";
+  });
+  h+="</tbody></table></div>";
+  /* วิเคราะห์รายข้อ */
+  h+="<hr class='s'><h3>การวิเคราะห์รายข้อ (Item Analysis) – ร้อยละของผู้ตอบถูก</h3><div style='overflow:auto'>"+itemAnalysis(db)+"</div>";
+  h+="<div style='display:flex;gap:10px;margin-top:16px;flex-wrap:wrap'>"+
+     "<button class='btn' onclick=\"show('view-home')\">← กลับหน้าแรก</button>"+
+     "<button class='btn b-green' onclick='exportCSV()'>ส่งออกไฟล์ CSV</button>"+
+     "<button class='btn b-grey' onclick='window.print()'>พิมพ์รายงาน</button>"+
+     "<button class='btn b-red' onclick='clearDB()'>ล้างข้อมูลทั้งหมด</button></div></div>";
+  $("#teacherBox").innerHTML=h;
+}
+function itemAnalysis(db){
+  const acc={};
+  db.records.forEach(r=>r.log.forEach((l,i)=>{
+    const k=r.mode+"|"+(i+1)+"|"+l.skill;acc[k]=acc[k]||{n:0,c:0,mode:r.mode,no:i+1,skill:l.skill};
+    acc[k].n++;if(l.ok)acc[k].c++;}));
+  const ks=Object.keys(acc);
+  if(!ks.length)return "<p class='mini'>ยังไม่มีข้อมูลการทำแบบทดสอบ</p>";
+  let h="<table><thead><tr><th>ชุด</th><th>ข้อที่</th><th class='l'>จุดประสงค์การเรียนรู้</th><th>ผู้ทำ (คน)</th><th>ตอบถูก (%)</th><th>การแปลผล</th></tr></thead><tbody>";
+  ks.sort((a,b)=>acc[a].mode.localeCompare(acc[b].mode)||acc[a].no-acc[b].no).forEach(k=>{
+    const o=acc[k],p=o.c/o.n*100;
+    h+="<tr><td>"+(o.mode==="pre"?"A (ก่อน)":"B (หลัง)")+"</td><td>"+o.no+"</td><td class='l'>"+esc(o.skill)+"</td><td>"+o.n+"</td><td>"+f2(p)+"</td><td>"+
+       (p<50?"<span class='tag r'>ควรสอนซ่อมเสริม</span>":p<80?"<span class='tag a'>ควรทบทวน</span>":"<span class='tag g'>บรรลุผล</span>")+"</td></tr>";});
+  return h+"</tbody></table>";
+}
+function detail(key){
+  const db=loadDB();const all=db.records.concat(db.games).filter(r=>keyOf(r).replace(/'/g,"")===key);
+  if(!all.length){alert("ไม่พบข้อมูล");return;}
+  let h="<div class='card'><h2>รายละเอียดรายบุคคล : "+esc(all[0].name)+"</h2>";
+  all.slice().reverse().forEach(r=>{
+    h+="<div class='qbox'><b>"+(r.mode==="pre"?"แบบทดสอบก่อนเรียน (ชุด A)":r.mode==="post"?"แบบทดสอบหลังเรียน (ชุด B)":esc(r.level||"เกมฝึกทักษะ"))+
+       "</b> · คะแนน "+r.score+"/"+r.total+" ("+r.percent+" %) · เวลา "+Math.floor(r.sec/60)+":"+String(r.sec%60).padStart(2,"0")+
+       " · ใช้คำใบ้ "+r.hint+" ครั้ง"+(r.typed?" · โหมดพิมพ์คำตอบเอง":"")+"<br><span class='mini'>"+esc(r.date)+"</span>";
+    h+="<div style='overflow:auto;margin-top:8px'><table><thead><tr><th>ข้อ</th><th class='l'>โจทย์</th><th class='l'>ตอบ</th><th class='l'>เฉลย</th><th>ผล</th></tr></thead><tbody>";
+    r.log.forEach((l,i)=>{h+="<tr><td>"+(i+1)+"</td><td class='l mth'>"+l.q+"</td><td class='l mth'>"+esc(l.user)+"</td><td class='l mth'>"+l.correct+"</td><td>"+(l.ok?"✓":"✗")+"</td></tr>";});
+    h+="</tbody></table></div></div>";});
+  h+="<button class='btn' onclick='paintTeacher()'>← กลับตารางสรุป</button> <button class='btn b-grey' onclick='window.print()'>พิมพ์</button></div>";
+  $("#teacherBox").innerHTML=h;window.scrollTo({top:0,behavior:"smooth"});
+}
+function exportCSV(){
+  const db=loadDB();const map=new Map();
+  db.records.forEach(r=>{const k=keyOf(r);if(!map.has(k))map.set(k,{name:r.name,room:r.room,no:r.no});
+    const o=map.get(k);if(r.mode==="pre")o.pre=r.score;else o.post=r.score;});
+  const F=SETTINGS.itemsPerTest;
+  let csv="\uFEFFชื่อ-นามสกุล,ชั้น/ห้อง,เลขที่,คะแนนก่อนเรียน,คะแนนหลังเรียน,คะแนนเต็ม,ผลต่าง,ร้อยละความก้าวหน้า,E.I.\n";
+  [...map.values()].forEach(r=>{
+    const pre=r.pre??"",post=r.post??"";
+    const diff=(r.pre!==undefined&&r.post!==undefined)?r.post-r.pre:"";
+    const gain=(diff!==""&&F-r.pre!==0)?f2(diff/(F-r.pre)*100):"";
+    const ei=(diff!==""&&F-r.pre!==0)?f2(diff/(F-r.pre)):"";
+    csv+='"'+r.name+'","'+r.room+'","'+r.no+'",'+pre+","+post+","+F+","+diff+","+gain+","+ei+"\n";});
+  const a=document.createElement("a");
+  a.href=URL.createObjectURL(new Blob([csv],{type:"text/csv;charset=utf-8;"}));
+  a.download="สรุปคะแนน_แยกตัวประกอบพหุนามดีกรีสอง.csv";a.click();
+}
+function clearDB(){if(confirm("ยืนยันการลบข้อมูลผลการทดสอบทั้งหมดหรือไม่ (ไม่สามารถกู้คืนได้)")){saveDB({records:[],games:[]});paintTeacher();}}
+
+/* =====================================================================
+   9) โหมดใบงาน PDF
+   ===================================================================== */
+function openPrint(){document.body.classList.add("showprint");buildPrint();window.scrollTo(0,0);}
+function closePrint(){document.body.classList.remove("showprint");show("view-home");}
+function headHTML(t,sub){
+  return "<div class='hd'><div style='font-size:14px'>"+esc($("#pSchool").value)+"</div><h2>"+t+"</h2>"+
+    "<div style='font-size:14px'>"+sub+" · ครูผู้สอน "+esc($("#pTeacher").value)+"</div></div>"+
+    "<div class='nm'><div>ชื่อ – นามสกุล ................................................</div><div>ชั้น ม.3/......</div><div>เลขที่ ......</div><div>คะแนนที่ได้ ......... / "+$("#pCount").value+"</div></div>";
+}
+function sheetHTML(n){
+  let h="<h3 style='margin-top:14px'>กระดาษคำตอบ (ทำเครื่องหมาย ✗ ทับตัวอักษรที่เลือก)</h3><table class='sheet'><tbody>";
+  for(let r=0;r<Math.ceil(n/5);r++){h+="<tr>";
+    for(let c=0;c<5;c++){const i=r*5+c+1;h+= i<=n ? "<td><b>"+i+".</b> &nbsp; ก &nbsp; ข &nbsp; ค &nbsp; ง</td>" : "<td></td>";}
+    h+="</tr>";}
+  return h+"</tbody></table>";
+}
+function itemsHTML(list,showCh){
+  let h="<ol>";
+  list.forEach(it=>{
+    h+="<li>"+(it.story?"<i>"+esc(it.story)+"</i><br>":"")+"<b>"+it.q.replace(/<[^>]+>/g,"")+"</b>";
+    if(showCh)h+="<div class='ch'>"+it.choices.map((c,k)=>LT[k]+". "+c).join("")+"</div>";
+    else h+="<div style='border-bottom:1px dotted #555;height:34px'></div>";
+    h+="</li>";});
+  return h+"</ol>";
+}
+function keyHTML(list,title){
+  let h="<div class='key' style='page-break-before:always'><h3>"+title+"</h3><ol>";
+  list.forEach(it=>{h+="<li><b>เฉลย : "+LT[it.answer]+". "+it.choices[it.answer]+"</b><br>แนวคิด : "+(it.why||"-")+"</li>";});
+  return h+"</ol></div>";
+}
+function buildPrint(){
+  const set=$("#pSet").value,n=Math.max(1,+$("#pCount").value||25);
+  const showCh=$("#pShow").checked,withKey=$("#pKey").checked,withSheet=$("#pSheet").checked;
+  let out="";
+  const mk=(bank,title,sub)=>{
+    const list=prepareItems(bank,n);
+    let h="<div style='page-break-after:always'>"+headHTML(title,sub)+
+      "<p style='font-size:14px'><b>คำชี้แจง</b> แบบทดสอบฉบับนี้เป็นแบบปรนัย 4 ตัวเลือก จำนวน "+list.length+" ข้อ ข้อละ 1 คะแนน ให้เลือกคำตอบที่ถูกต้องที่สุดเพียงคำตอบเดียว (เวลา 50 นาที)</p>"+
+      itemsHTML(list,showCh)+(withSheet?sheetHTML(list.length):"")+"</div>";
+    if(withKey)h+=keyHTML(list,"เฉลยและแนวคิด – "+title);
+    return h;
+  };
+  if(set==="pre")out=mk(preTestBank,"แบบทดสอบก่อนเรียน (ชุด A)","หน่วยการเรียนรู้ การแยกตัวประกอบพหุนามดีกรีสองและการแก้อสมการ");
+  else if(set==="post")out=mk(postTestBank,"แบบทดสอบหลังเรียน (ชุด B)","หน่วยการเรียนรู้ การแยกตัวประกอบพหุนามดีกรีสองและการแก้อสมการ");
+  else if(set==="both")out=mk(preTestBank,"แบบทดสอบก่อนเรียน (ชุด A)","แบบทดสอบคู่ขนาน ฉบับที่ 1")+mk(postTestBank,"แบบทดสอบหลังเรียน (ชุด B)","แบบทดสอบคู่ขนาน ฉบับที่ 2");
+  else{
+    let built=[];
+    LEVELS.forEach(L=>{shuffle(L.data).slice(0,Math.ceil(n/4)).forEach(sp=>built.push(L.build(sp)));});
+    const list=prepareItems(built,n);
+    out="<div style='page-break-after:always'>"+headHTML("ใบงานฝึกทักษะ (ใช้ควบคู่กับเกม 4 ด่าน)","การแยกตัวประกอบพหุนามดีกรีสองและการแก้อสมการ")+
+      "<p style='font-size:14px'><b>คำชี้แจง</b> ให้นักเรียนแสดงวิธีทำหรือเลือกคำตอบที่ถูกต้อง แล้วนำไปตรวจสอบกับเกมในด่านเดียวกัน</p>"+
+      itemsHTML(list,showCh)+(withSheet?sheetHTML(list.length):"")+"</div>";
+    if(withKey)out+=keyHTML(list,"เฉลยและแนวคิด – ใบงานฝึกทักษะ");
+  }
+  $("#printOut").innerHTML=out;
+}
+
+/* =====================================================================
+   10) เริ่มต้นระบบ
+   ===================================================================== */
+$("#levelMenu").innerHTML=LEVELS.map(L=>
+ "<button class='tile "+L.cls+"' onclick='startLevel("+L.id+")'><div class='ic'>"+L.id+"</div><b>"+L.name+"</b>"+
+ "<span>"+L.desc+"<br>จำนวน "+L.questionCount+" ข้อ · หัวใจ "+SETTINGS.hearts+" ดวง</span></button>").join("");
+paintUser();
+</script>
+</body>
+</html>
